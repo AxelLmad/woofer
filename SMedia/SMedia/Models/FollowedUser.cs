@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SMedia.Models
 {
-    public class UsuarioSeguido
+    public class FollowedUser
     {
         public int Id { get; set; }
         public int FollowerId { get; set; }

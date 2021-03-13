@@ -16,7 +16,7 @@ namespace SMedia.Models
         public DbSet<PostPicture> postPicture { get; set; }
         public DbSet<Reaction> Reaction { get; set; }
         public DbSet<User> User { get; set; }
-        public DbSet<UsuarioSeguido> UsuarioSeguido { get; set; }
+        public DbSet<FollowedUser> UsuarioSeguido { get; set; }
         public DbSet<Viewed> Viewed { get; set; }
 
         public SMediaDbContext() { }
@@ -261,7 +261,7 @@ namespace SMedia.Models
                     .IsRequired();
             });
 
-            modelBuilder.Entity<UsuarioSeguido>(entity =>
+            modelBuilder.Entity<FollowedUser>(entity =>
             {
                 entity.HasKey(e => e.Id);
 
