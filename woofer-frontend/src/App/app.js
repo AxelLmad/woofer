@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Helmet} from 'react-helmet';
 import Login from "./login/login";
+import Header from "./header/header";
 
 class App extends React.Component{
 
@@ -21,6 +22,10 @@ class App extends React.Component{
 
                         <Route exact path='/'>
                             Hola
+                        </Route>
+
+                        <Route exact path='/test'>
+                            <Header/>
                         </Route>
                     </Switch>
                 </BrowserRouter>
