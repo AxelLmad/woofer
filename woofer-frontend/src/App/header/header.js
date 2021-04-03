@@ -29,10 +29,10 @@ class Header extends React.Component{
                 </div>
                 <nav className={"flex flex-row justify-around items-end mr-2 md:mr-8 mb-4"}>
                     <figure className={"bg-light text-primary cursor-pointer mr-1 md:mr-4 hover:bg-primary md:w-12 md:h-8"}>
-                        <img className={"transform md:scale-125 mx-auto mt-1"} src={mailIcon} alt="Mensajes"/>
+                        <img className={"transform md:scale-150 mx-auto md:mt-2"} src={mailIcon} alt="Mensajes"/>
                     </figure>
                     <figure className={"bg-light cursor-pointer ml-1 md:ml-4 hover:bg-primary md:w-12 md:h-8"}>
-                        <img className={"transform md:scale-125 mx-auto mt-1"} src={userIcon} alt="Usuario"/>
+                        <img className={"transform md:scale-150 mx-auto md:mt-2"} src={userIcon} alt="Usuario"/>
                     </figure>
                 </nav>
 

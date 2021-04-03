@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Helmet} from 'react-helmet';
 import Login from "./login/login";
 import Header from "./header/header";
+import Sidebar from "./sidebar/sidebar";
 
 class App extends React.Component{
 
@@ -26,6 +27,7 @@ class App extends React.Component{
 
                         <Route exact path='/test'>
                             <Header/>
+                            <Sidebar/>
                         </Route>
                     </Switch>
                 </BrowserRouter>
