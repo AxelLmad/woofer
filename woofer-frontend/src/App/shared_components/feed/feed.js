@@ -13,9 +13,10 @@ class Feed extends React.Component{
 
                     {this.props.posts.map((post) => {
 
-                        return (<li>
+                        return (<li key={post.id}>
                             <PostView
                             className={"min-w-full"}
+
                             communityName={post.community.name}
                             content={post.content}
                             creationDate={post.creationDate}

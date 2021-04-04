@@ -7,7 +7,7 @@ class Home extends React.Component{
 
     posts = [
         new Post(0, 'Is naruto the besta anime ever?', '03-04-2021', {name: 'Jane Doe', nickname: 'janedoe'}, {name: 'Naruto'}),
-        new Post(0, 'Is Lapras the next pokemon in smash?', '03-04-2021', {name: 'SadTogeppi', nickname: 'togeppi'}, {name: 'Pokemon'}),
+        new Post(1, 'Is Lapras the next pokemon in smash?', '03-04-2021', {name: 'Sad Togeppi', nickname: 'togeppi'}, {name: 'Pokemon'}),
     ];
 
     render(){
