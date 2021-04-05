@@ -37,7 +37,7 @@ class Sidebar extends React.Component{
     render(){
 
         return(
-            <div className={"fixed mt-16 border border-t-0 border-l-0 border-b-0 border-gray-600"}>
+            <div className={"fixed mt-16 border border-t-0 border-l-0 border-b-0 border-gray-600 z-40"}>
                 <button onClick={this.handleClickMenuButton} className={"bg-light w-8 h-8 ml-2 mt-2 pt-1 active:bg-primary outline-none xl:hidden fixed"}>
                     <img className={"transform scale-150 mx-auto"} src={menuIcon} alt="Menu"/>
                 </button>

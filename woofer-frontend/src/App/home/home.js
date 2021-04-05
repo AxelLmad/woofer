@@ -2,6 +2,7 @@ import React from 'react';
 import {Post} from "../../models/post";
 import Feed from "../shared_components/feed/feed";
 import Layout from "../layout/layout";
+import Publisher from "../shared_components/publisher/publisher";
 
 class Home extends React.Component{
 
@@ -15,6 +16,7 @@ class Home extends React.Component{
         return(
             <Layout>
                 <div className={"flex flex-col w-full items-center mt-16"}>
+                    <Publisher/>
                     <Feed posts={this.posts}/>
                 </div>
             </Layout>

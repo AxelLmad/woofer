@@ -5,20 +5,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
 
-	colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
 
-        midnight: '#0A014F',
-        primary: '#F6CACA',
-        light: '#FAE8EB',
-        success: '#43AA8B',
-        danger: '#EF3054',
-        dark: '#000a17',
-
-        gray: colors.coolGray,
-        white: colors.white
-    },
     minHeight: {
       '0': '0',
       '16': '4rem',
@@ -29,6 +16,10 @@ module.exports = {
       '128': '32rem',
       'full': '100%',
     },
+    boxShadow: {
+      white: '0px 0px 13px -1px rgba(255,255,255,1)',
+      innerW: 'inset 0px 0px 13px -8px rgba(255,255,255,1)'
+    },
     extend: {
 
       spacing: {
@@ -37,8 +28,20 @@ module.exports = {
         '96': '24rem',
         'kilo': '36rem',
         'mega': '48rem'
-      }
+      },
 
+      colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
+
+        midnight: '#0A014F',
+        primary: '#F6CACA',
+        light: '#FAE8EB',
+        success: '#43AA8B',
+        danger: '#EF3054',
+        dark: '#000a17',
+
+      }
 
 
     },
