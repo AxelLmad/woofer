@@ -140,6 +140,10 @@ namespace SMedia.Models
             {
                 entity.HasKey(e => e.Id);
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
+
                 entity.Property(e => e.Content)
                     .HasMaxLength(320)
                     .IsUnicode(false)
@@ -150,13 +154,16 @@ namespace SMedia.Models
                     .IsRequired();
 
                 entity.Property(e => e.AuthorId)
+                    .HasColumnType("bigint")
                     .IsRequired();
 
                 entity.Property(e => e.CommunityId)
+                    .HasColumnType("bigint")
                     .IsRequired();
 
                 entity.Property(e => e.LastPostId)
-                    .IsRequired();
+                    .HasColumnType("bigint")
+                    .IsRequired(false);
 
                 entity.Property(e => e.Active)
                     .HasColumnType("bit")
@@ -170,9 +177,9 @@ namespace SMedia.Models
                     .WithMany(y => y.Post)
                     .HasForeignKey("FK__Post__CommunityI__2D27B809");
 
-                entity.HasOne(e => e.LastPost)
-                    .WithOne(y => y.LastPost)
-                    .HasForeignKey("FK__Post__LastPostId__2E1BDC42");
+                //entity.HasOne(e => e.LastPost)
+                //    .WithOne(y => y.BeforePost)
+                //    .HasForeignKey("FK__Post__LastPostId__2E1BDC42");
             });
 
             modelBuilder.Entity<PostPicture>(entity =>
@@ -220,6 +227,10 @@ namespace SMedia.Models
             {
                 entity.HasKey(entity => entity.Id);
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
+
                 entity.Property(e => e.NickName)
                     .HasMaxLength(255)
                     .IsUnicode(false)
@@ -241,10 +252,12 @@ namespace SMedia.Models
                     .IsRequired();
 
                 entity.Property(e => e.LastName)
+                    .HasMaxLength(255)
                     .IsUnicode(false)
                     .IsRequired();
 
                 entity.Property(e => e.Picture)
+                    .HasMaxLength(255)
                     .IsUnicode()
                     .IsRequired(false);
 
