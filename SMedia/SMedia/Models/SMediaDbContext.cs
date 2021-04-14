@@ -9,14 +9,14 @@ namespace SMedia.Models
     public class SMediaDbContext : DbContext
     {
         public DbSet<Community> Community { get; set; }
-        public DbSet<FavoritePost> favoritePost { get; set; }
+        public DbSet<FavoritePost> FavoritePost { get; set; }
         public DbSet<FollowedCommunity> FollowedCommunity { get; set; }
         public DbSet<Message> Message { get; set; }
         public DbSet<Post> Post { get; set; }
-        public DbSet<PostPicture> postPicture { get; set; }
+        public DbSet<PostPicture> PostPicture { get; set; }
         public DbSet<Reaction> Reaction { get; set; }
         public DbSet<User> User { get; set; }
-        public DbSet<FollowedUser> UsuarioSeguido { get; set; }
+        public DbSet<FollowedUser> FollowedUser { get; set; }
         public DbSet<Viewed> Viewed { get; set; }
 
         public SMediaDbContext() { }
@@ -30,7 +30,11 @@ namespace SMedia.Models
         {
             modelBuilder.Entity<Community>(entity =>
             {
-                entity.HasKey(entity => entity.Id);
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -57,11 +61,16 @@ namespace SMedia.Models
                     .IsRequired();
 
                 entity.Property(e => e.OwnerId)
+                    .HasColumnType("bigint")
                     .IsRequired();
 
                 entity.Property(e => e.Active)
                     .HasColumnType("bit")
                     .IsRequired();
+
+                entity.HasOne(e => e.Owner)
+                    .WithMany(y => y.MyCommunity)
+                    .HasConstraintName("FK__Community__Owner__286302EC");
             });
 
             modelBuilder.Entity<FavoritePost>(entity =>
@@ -111,6 +120,10 @@ namespace SMedia.Models
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
 
                 entity.Property(e => e.Content)
                     .IsUnicode(false)
@@ -171,15 +184,15 @@ namespace SMedia.Models
 
                 entity.HasOne(e => e.Author)
                     .WithMany(y => y.Post)
-                    .HasForeignKey("FK__Post__AuthorId__2C3393D0");
+                    .HasConstraintName("FK__Post__AuthorId__2C3393D0");
 
                 entity.HasOne(e => e.Community)
                     .WithMany(y => y.Post)
-                    .HasForeignKey("FK__Post__CommunityI__2D27B809");
+                    .HasConstraintName("FK__Post__CommunityI__2D27B809");
 
-                //entity.HasOne(e => e.LastPost)
-                //    .WithOne(y => y.BeforePost)
-                //    .HasForeignKey("FK__Post__LastPostId__2E1BDC42");
+                entity.HasOne(e => e.LastPost)
+                    .WithOne(y => y.BeforePost)
+                    .HasConstraintName("FK__Post__LastPostId__2E1BDC42");
             });
 
             modelBuilder.Entity<PostPicture>(entity =>
@@ -278,21 +291,27 @@ namespace SMedia.Models
             {
                 entity.HasKey(e => e.Id);
 
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
+
                 entity.Property(e => e.FollowerId)
+                    .HasColumnType("bigint")
                     .IsRequired();
 
                 entity.Property(e => e.FollowedId)
+                    .HasColumnType("bigint")
                     .IsRequired();
 
                 entity.Property(e => e.DateOfFollow)
                     .HasColumnType("datetime")
                     .IsRequired();
 
-                entity.HasOne(e => e.Followed)
+                entity.HasOne(e => e.Follower)
                     .WithMany(y => y.Followed)
                     .HasForeignKey("FK__UsuarioSe__Follo__412EB0B6");
 
-                entity.HasOne(e => e.Follower)
+                entity.HasOne(e => e.Followed)
                     .WithMany(y => y.Follower)
                     .HasForeignKey("FK__UsuarioSe__Follo__4222D4EF");
             });

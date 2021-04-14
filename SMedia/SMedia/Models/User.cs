@@ -18,6 +18,7 @@ namespace SMedia.Models
         public DateTime LastLogin { get; set; }
         public bool Active { get; set; }
 
+        public virtual ICollection<Community> MyCommunity { get; set; }
         public virtual ICollection<FavoritePost> FavoritePost { get; set; }
         public virtual ICollection<FollowedCommunity> FollowedCommunity { get; set; }
         public virtual ICollection<FollowedUser> Follower { get; set; }

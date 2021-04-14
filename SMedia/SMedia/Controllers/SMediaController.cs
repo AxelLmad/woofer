@@ -43,7 +43,15 @@ namespace SMedia.Controllers
             try
             {
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.GetLastPosts());
+                Post lastposts = sMediaCore.GetLastPosts();
+                if(lastposts != null)
+                {
+                    return Ok(lastposts);
+                }
+                else
+                {
+                    return Ok("No tienes ningun post");
+                }
             }
             catch(Exception ex)
             {
@@ -62,6 +70,43 @@ namespace SMedia.Controllers
                 return Ok("User created succesfully!");
             }
             catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult CreatePost([FromBody] Post post)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                sMediaCore.CreatePost(post);
+                return Ok("Post created succesfully!");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult all()
+        {
+            try
+            {
+                bool IdExists = dbContext.Post.Any();
+                if (IdExists)
+                {
+                    Post comms = dbContext.Post.First();
+                    return Ok(comms);
+                }
+                else
+                {
+                    return Ok("No hay nada!");
+                }
+            }
+            catch(Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }

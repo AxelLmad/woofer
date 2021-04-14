@@ -65,8 +65,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                bool validUser = Validate(user);
-
+                bool validUser = ValidateUser(user);
                 if (validUser)
                 {
                     user.RegisterDate = DateTime.Now;
@@ -81,7 +80,7 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public bool Validate(User user)
+        public bool ValidateUser(User user)
         {
             try
             {
@@ -103,12 +102,12 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                //bool anyPost = dbContext.User.Any();
-                if (true)
+                bool anyPost = dbContext.Post.Any(post => post.Id == 1);
+                if (anyPost)
                 {
                     Post lastPosts = (
-                        from LP in dbContext.Post
-                        //orderby LP.LastPost
+                        from LP in dbContext.Post where LP.Id == 1 
+                        orderby LP.CreationDate
                         select LP
                         ).First();
                     return lastPosts;
@@ -116,6 +115,44 @@ namespace SMedia.Clases.Core
                 return null;
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void CreatePost(Post newpost)
+        {
+            try
+            {
+
+                bool validUser = ValidatePost(newpost);
+                if (validUser)
+                {
+                    newpost.CreationDate = DateTime.Now;
+                    newpost.Active = true;
+                    dbContext.Add(newpost);
+                    dbContext.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool ValidatePost(Post post)
+        {
+            try
+            {
+
+                if (string.IsNullOrEmpty(post.Content))
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
