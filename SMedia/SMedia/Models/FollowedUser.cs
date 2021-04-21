@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace SMedia.Models
 {
-    public class UsuarioSeguido
+    public class FollowedUser
     {
-        public int Id { get; set; }
-        public int FollowerId { get; set; }
-        public int FollowedId { get; set; }
+        public long Id { get; set; }
+        public long FollowerId { get; set; }
+        public long FollowedId { get; set; }
         public DateTime DateOfFollow { get; set; }
 
         public virtual User Follower { get; set; }
