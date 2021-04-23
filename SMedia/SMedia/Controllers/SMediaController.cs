@@ -22,7 +22,6 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        
         [HttpPost("{id}")]
         public IActionResult GetProfileUser([FromRoute] int id)
         {
@@ -31,27 +30,39 @@ namespace SMedia.Controllers
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
                 return Ok(sMediaCore.GetProfileModel(id));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
 
-        [HttpPost]
-        public IActionResult GetLastPosts()
+        [HttpPost("{id}")]
+        public IActionResult GetLastPosts([FromRoute] int id)
         {
             try
             {
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
-                Post lastposts = sMediaCore.GetLastPosts();
-                if(lastposts != null)
-                {
+                List<Post> lastposts = sMediaCore.GetLastPosts(id);
+                if (lastposts != null)
                     return Ok(lastposts);
-                }
-                else
-                {
-                    return Ok("No tienes ningun post");
-                }
+                return Ok("No hay posts!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult GetMessages([FromRoute] int id)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                List<Message> messages = sMediaCore.GetMessages(id);
+                if (messages != null)
+                    return Ok(messages);
+                return Ok("No hay mensajes!");
             }
             catch(Exception ex)
             {
@@ -59,7 +70,6 @@ namespace SMedia.Controllers
             }
         }
 
-        // PUT api/<SMediaController>/5
         [HttpPut]
         public IActionResult SignIn([FromBody] User user)
         {
@@ -85,6 +95,21 @@ namespace SMedia.Controllers
                 return Ok("Post created succesfully!");
             }
             catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult SendMessage([FromBody] Message message)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                sMediaCore.SendMessage(message);
+                return Ok("Message created succesfully!");
+            }
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }

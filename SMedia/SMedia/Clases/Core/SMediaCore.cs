@@ -98,19 +98,57 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public Post GetLastPosts()
+        public List<Post> GetLastPosts(int id)
         {
             try
             {
-                bool anyPost = dbContext.Post.Any(post => post.Id == 1);
-                if (anyPost)
+                bool anyUser = dbContext.Post.Any(user => user.Id == id);
+                if (anyUser)
                 {
-                    Post lastPosts = (
-                        from LP in dbContext.Post where LP.Id == 1 
-                        orderby LP.CreationDate
-                        select LP
-                        ).First();
-                    return lastPosts;
+                    bool anyFollower = dbContext.FollowedUser.Any(follower => follower.FollowerId == id);
+                    if (anyFollower)
+                    {
+                        var UserIFollow = from FU in dbContext.FollowedUser
+                                          where FU.FollowerId == id
+                                          select FU;
+                        bool anyCommunity = dbContext.FollowedCommunity.Any(comm => comm.FollowerId == id);
+                        if (anyCommunity)
+                        {
+                            var CommIFollow = from FC in dbContext.FollowedCommunity
+                                              where FC.FollowerId == id
+                                              select FC;
+                            List<Post> LastPosts = (
+                                from LP in dbContext.Post
+                                join FU in UserIFollow on LP.AuthorId equals FU.FollowedId
+                                join FC in CommIFollow on LP.CommunityId equals FC.CommunityId
+                                orderby LP.CreationDate
+                                select LP
+                                ).ToList();
+                            return LastPosts;
+                        }
+                        else { return null; }
+                    }
+                    else { return null; }
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Message> GetMessages(int id)
+        {
+            try
+            {
+                bool anyUser = dbContext.User.Any(user => user.Id == id);
+                bool anyMessage = dbContext.Message.Any(message => message.ReceiverId == id);
+                if (anyUser && anyMessage) {
+                    List<Message> messages = (from M in dbContext.Message
+                                             where (M.ReceiverId == id || M.SenderId == id)
+                                             select M).ToList();
+                    return messages;
                 }
                 return null;
             }
@@ -141,12 +179,32 @@ namespace SMedia.Clases.Core
             }
         }
 
+        public void SendMessage(Message message)
+        {
+            try
+            {
+
+                bool validUser = ValidateMessage(message);
+                if (validUser)
+                {
+                    message.Date = DateTime.Now;
+                    dbContext.Add(message);
+                    dbContext.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public bool ValidatePost(Post post)
         {
             try
             {
 
-                if (string.IsNullOrEmpty(post.Content))
+                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId != null || post?.CommunityId != null)
                 {
                     return false;
                 }
@@ -157,5 +215,22 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+        public bool ValidateMessage(Message message)
+        {
+            try
+            {
+
+                if (string.IsNullOrEmpty(message.Content) || message?.Sender != null || message?.Receiver != null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
