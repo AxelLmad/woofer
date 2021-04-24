@@ -22,9 +22,9 @@ namespace SMedia.Models
     }
     public class FollowedCommunity
     {
-        public int Id { get; set; }
-        public int FollowerId { get; set; }
-        public int CommunityId { get; set; }
+        public long Id { get; set; }
+        public long FollowerId { get; set; }
+        public long CommunityId { get; set; }
         public DateTime DateOfFollow { get; set; }
 
         public virtual User Follower { get; set; }
