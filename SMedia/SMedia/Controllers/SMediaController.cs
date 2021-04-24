@@ -149,11 +149,11 @@ namespace SMedia.Controllers
             {
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
                 long idUser = sMediaCore.Login(NickName, Password);
-                if(idUser != -1)
+                if (idUser != -1)
                     return Ok(idUser);
                 return Ok("No hay usuario con: " + idUser);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
@@ -166,11 +166,11 @@ namespace SMedia.Controllers
             {
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
                 bool viewed = sMediaCore.SetViewOnPost(idUser, idPost);
-                if(viewed)
+                if (viewed)
                     return Ok("Vista agregada al Post!");
                 return Ok("Vista no se pudo agregar");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
@@ -204,7 +204,7 @@ namespace SMedia.Controllers
                 bool newFollow = sMediaCore.FollowUser(idFollower, idToFollow);
                 if (newFollow)
                     return Ok(idFollower + " Ahora sigue a " + idToFollow);
-                return Ok("No se pudo seguir al usuario"+ idToFollow +
+                return Ok("No se pudo seguir al usuario" + idToFollow +
                     ". Se debe enviar id del usuairio seguidor y id del usuario a seguir, comprobar tambien: " +
                     "\n Que no sean el mismo usuario/id" +
                     "\n No existe ya esa combinación de seguidor y seguido. No duplicar en BD!");
@@ -242,7 +242,7 @@ namespace SMedia.Controllers
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
                 bool newReaction = sMediaCore.SetReactPost(idPost, idUser, typeReaction);
                 if (newReaction)
-                    return Ok(idUser + " Reaccionó con " + typeReaction +" a la publicación " + idPost);
+                    return Ok(idUser + " Reaccionó con " + typeReaction + " a la publicación " + idPost);
                 return Ok("No se pudo reaccionar al Post" + idPost +
                     ". Se debe enviar id del usuario que reacciona y id del post a reaccionar, comprobar tambien: " +
                     "\n No existe ya esa combinación de seguidor y comunidad. No se puede reaccionar 2 veces en BD!");
@@ -275,11 +275,11 @@ namespace SMedia.Controllers
             {
                 SMediaCore sMediaCore = new SMediaCore(dbContext);
                 bool exito = sMediaCore.CreatePost(post);
-                if(exito)
+                if (exito)
                     return Ok("Post created succesfully!");
                 return Ok("Post no valido");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
@@ -310,7 +310,91 @@ namespace SMedia.Controllers
                     return Ok("Comunidad creada de manera exitosa");
                 return Ok("Comunidad NO creada. Algo sucedió mal!");
             }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult DisableUser([FromRoute] int id)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                bool DisabledUser = sMediaCore.DisableUser(id);
+                if (DisabledUser)
+                    return Ok("Usuario eliminado!");
+                return Ok("No se pudo eliminar al usuario con id: " + id);
+            }
             catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult DisablePost([FromRoute] int id)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                bool DisabledPost = sMediaCore.DisablePost(id);
+                if (DisabledPost)
+                    return Ok("Post eliminado!");
+                return Ok("No se pudo eliminar el post con id: " + id);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+        [HttpPut("{id}")]
+        public IActionResult DisableCommunity([FromRoute] int id)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                bool DisabledCommunity = sMediaCore.DisableCommunity(id);
+                if (DisabledCommunity)
+                    return Ok("Comunidad eliminada!");
+                return Ok("No se pudo eliminar la communidad con id: " + id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpDelete("{idFollower},{idFollowed}")]
+        public IActionResult UnfollowUser([FromRoute] int idFollower, int idFollowed)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                bool Unfollow = sMediaCore.UnfollowUser(idFollower, idFollowed);
+                if (Unfollow)
+                    return Ok(idFollower + " ha dejado de seguir al usuario: " + idFollowed);
+                return Ok("No se pudo dar unfollow");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpDelete("{idFollower},{idCommunity}")]
+        public IActionResult UnfollowCommunity([FromRoute] int idFollower, int idCommunity)
+        {
+            try
+            {
+                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                bool Unfollow = sMediaCore.UnfollowCommunity(idFollower, idCommunity);
+                if (Unfollow)
+                    return Ok(idFollower + " ha dejado de seguir al usuario: " + idCommunity);
+                return Ok("No se pudo dar unfollow");
+            }
+            catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
