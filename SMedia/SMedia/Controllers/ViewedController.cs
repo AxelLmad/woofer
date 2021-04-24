@@ -24,7 +24,7 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                ViewedCore sMediaCore = new ViewedCore(dbContext);
                 bool viewed = sMediaCore.SetViewOnPost(idUser, idPost);
                 if (viewed)
                     return Ok("Vista agregada al Post!");
@@ -41,7 +41,7 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                ViewedCore sMediaCore = new ViewedCore(dbContext);
                 int viewes = sMediaCore.GetPostViewes(id);
                 if (viewes != -1)
                     return Ok(viewes);

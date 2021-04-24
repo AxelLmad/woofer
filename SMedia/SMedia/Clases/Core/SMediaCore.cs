@@ -120,121 +120,11 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public List<Post> GetLastPosts(int id)
-        {
-            try
-            {
-                bool anyUser = dbContext.Post.Any(user => user.Id == id && user.Active);
-                if (anyUser)
-                {
-                    bool anyFollower = dbContext.FollowedUser.Any(follower => follower.FollowerId == id);
-                    if (anyFollower)
-                    {
-                        var UserIFollow = from FU in dbContext.FollowedUser
-                                          where FU.FollowerId == id
-                                          select FU;
-                        bool anyCommunity = dbContext.FollowedCommunity.Any(comm => comm.FollowerId == id);
-                        if (anyCommunity)
-                        {
-                            var CommIFollow = from FC in dbContext.FollowedCommunity
-                                              where FC.FollowerId == id
-                                              select FC;
-                            List<Post> LastPosts = (
-                                from LP in dbContext.Post
-                                join FU in UserIFollow on LP.AuthorId equals FU.FollowedId
-                                join FC in CommIFollow on LP.CommunityId equals FC.CommunityId
-                                where LP.Active
-                                orderby LP.CreationDate
-                                select LP
-                                ).Take(10).ToList();
-                            return LastPosts;
-                        }
-                        else { return null; }
-                    }
-                    else { return null; }
-                }
-                return null;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
 
 
-        public int GetPostViewes(int id)
-        {
-            try
-            {
-                bool AnyPost = dbContext.Post.Any(post => post.Id == id);
-                if (AnyPost)
-                {
-                    IEnumerable<Viewed> viewsPost = ( from V in dbContext.Viewed
-                                                    where V.PostId == id
-                                                    select V);
-                    int viewes = viewsPost.Count();
-                    return viewes;
-                }
-                return -1;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public bool SetViewOnPost(int idUser, int idPost)
-        {
-            try
-            {
-                bool AnyUser = dbContext.User.Any(user => user.Id == idUser);
-                bool AnyPost = dbContext.Post.Any(post => post.Id == idPost);
-                if(AnyUser && AnyUser)
-                {
-                    bool anyViewed = dbContext.Viewed.Any(viewed => viewed.UserId == idUser
-                                                            && viewed.PostId == idPost);
-                    if (!anyViewed)
-                    {
-                        Viewed viewed = new Viewed
-                        {
-                            UserId = idUser,
-                            PostId = idPost
-                        };
-                        dbContext.Add(viewed);
-                        dbContext.SaveChanges();
-                        return true;
-                    }
-                    return false;
-                }
 
-                return false;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        public bool CreatePost(Post newpost)
-        {
-            try
-            {
 
-                bool validPost = ValidatePost(newpost);
-                if (validPost)
-                {
-                    newpost.CreationDate = DateTime.Now;
-                    newpost.Active = true;
-                    dbContext.Add(newpost);
-                    dbContext.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         public List<User> GetFollowedUsers(int id)
         {
@@ -414,25 +304,7 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public bool DisablePost(int id)
-        {
-            try
-            {
-                Post AnyPost = dbContext.Post.FirstOrDefault(post => post.Id == id && post.Active);
-                if (AnyPost != null)
-                {
-                    AnyPost.Active = false;
-                    dbContext.Update(AnyPost);
-                    dbContext.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
+
         public bool DisableCommunity(int id)
         {
             try
@@ -493,22 +365,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public bool ValidatePost(Post post)
-        {
-            try
-            {
 
-                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId != null || post?.CommunityId != null)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public bool ValidateCommunity(Community community)
         {
             try

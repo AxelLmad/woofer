@@ -24,7 +24,7 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                PostCore sMediaCore = new PostCore(dbContext);
                 List<Post> lastposts = sMediaCore.GetLastPosts(id);
                 if (lastposts != null)
                     return Ok(lastposts);
@@ -41,7 +41,7 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                PostCore sMediaCore = new PostCore(dbContext);
                 bool exito = sMediaCore.CreatePost(post);
                 if (exito)
                     return Ok("Post created succesfully!");
@@ -58,7 +58,7 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
+                PostCore sMediaCore = new PostCore(dbContext);
                 bool DisabledPost = sMediaCore.DisablePost(id);
                 if (DisabledPost)
                     return Ok("Post eliminado!");
