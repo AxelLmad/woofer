@@ -22,7 +22,7 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetProfileUser([FromRoute] int id)
         {
             try
@@ -40,7 +40,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetLastPosts([FromRoute] int id)
         {
             try
@@ -57,7 +57,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetFavoritePosts([FromRoute] int id)
         {
             try
@@ -74,7 +74,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetFollowedUsers([FromRoute] int id)
         {
             try
@@ -91,7 +91,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetFollowedCommunities([FromRoute] int id)
         {
             try
@@ -108,7 +108,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetMessages([FromRoute] int id)
         {
             try
@@ -125,7 +125,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetPostViewes([FromRoute] int id)
         {
             try
@@ -141,8 +141,9 @@ namespace SMedia.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
-        [HttpGet("{NickName},{Password}")]
-        public IActionResult Login([FromRoute] string NickName, [FromRoute] string Password)
+        [HttpPost]
+        [Route("{NickName}")]
+        public IActionResult Login([FromRoute] string NickName,[FromBody] string Password)
         {
             try
             {
