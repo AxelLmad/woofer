@@ -35,7 +35,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                bool IdExists = dbContext.User.Any(user => user.Id == id);
+                bool IdExists = dbContext.User.Any(user => user.Id == id && user.Active);
                 if (IdExists) {
                     var cosulta = (from u in dbContext.User where u.Id == id
                                    select new { 
@@ -84,7 +84,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                bool AnyUser = dbContext.User.Any(user => user.NickName == NickName && user.Password == Password);
+                bool AnyUser = dbContext.User.Any(user => user.NickName == NickName && user.Password == Password && user.Active);
                 if (AnyUser)
                 {
                     User user = (
@@ -123,7 +123,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                bool anyUser = dbContext.Post.Any(user => user.Id == id);
+                bool anyUser = dbContext.Post.Any(user => user.Id == id && user.Active);
                 if (anyUser)
                 {
                     bool anyFollower = dbContext.FollowedUser.Any(follower => follower.FollowerId == id);
@@ -142,6 +142,7 @@ namespace SMedia.Clases.Core
                                 from LP in dbContext.Post
                                 join FU in UserIFollow on LP.AuthorId equals FU.FollowedId
                                 join FC in CommIFollow on LP.CommunityId equals FC.CommunityId
+                                where LP.Active
                                 orderby LP.CreationDate
                                 select LP
                                 ).Take(10).ToList();
@@ -416,22 +417,33 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                bool AnyReaction = dbContext.Reaction.Any(reaction => reaction.PostId == idPost
-                                                            && reaction.UserId == idUser);
                 bool AnyUser = dbContext.User.Any(user => user.Id == idUser);
                 bool AnyPost = dbContext.Post.Any(post => post.Id == idPost);
-                if (!AnyReaction && AnyUser && AnyPost)
+                if (AnyUser && AnyPost)
                 {
-                    Reaction newReaction = new Reaction
+                    Reaction AnyReaction = dbContext.Reaction.FirstOrDefault(reaction => reaction.PostId == idPost
+                                            && reaction.UserId == idUser);
+                    if (AnyReaction == null)
                     {
-                        UserId = idUser,
-                        PostId = idPost,
-                        Type = typeReaction
-                    };
-                    dbContext.Add(newReaction);
-                    dbContext.SaveChanges();
-                    return true;
+                        Reaction newReaction = new Reaction
+                        {
+                            UserId = idUser,
+                            PostId = idPost,
+                            Type = typeReaction
+                        };
+                        dbContext.Add(newReaction);
+                        dbContext.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        AnyReaction.Type = typeReaction;
+                        dbContext.Update(AnyReaction);
+                        dbContext.SaveChanges();
+                        return true;
+                    }
                 }
+
                 return false;
             }
             catch(Exception ex)
@@ -473,6 +485,103 @@ namespace SMedia.Clases.Core
                 return false;
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool DisableUser(int id)
+        {
+            try
+            {
+                User AnyUser = dbContext.User.FirstOrDefault(user => user.Id == id && user.Active);
+                if (AnyUser != null)
+                {
+                    AnyUser.Active = false;
+                    dbContext.Update(AnyUser);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool DisablePost(int id)
+        {
+            try
+            {
+                Post AnyPost = dbContext.Post.FirstOrDefault(post => post.Id == id && post.Active);
+                if (AnyPost != null)
+                {
+                    AnyPost.Active = false;
+                    dbContext.Update(AnyPost);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool DisableCommunity(int id)
+        {
+            try
+            {
+                Community AnyCommunity = dbContext.Community.FirstOrDefault(comm => comm.Id == id && comm.Active);
+                if (AnyCommunity != null)
+                {
+                    AnyCommunity.Active = false;
+                    dbContext.Update(AnyCommunity);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool UnfollowUser(int idFollower, int idFollowed)
+        {
+            try
+            {
+                FollowedUser follow = dbContext.FollowedUser.FirstOrDefault(
+                    follow => follow.FollowerId == idFollower && follow.FollowedId == idFollowed);
+                if(follow != null)
+                {
+                    dbContext.Remove(follow);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool UnfollowCommunity(int idFollower, int idCommunity)
+        {
+            try
+            {
+                FollowedCommunity follow = dbContext.FollowedCommunity.FirstOrDefault(
+                    follow => follow.FollowerId == idFollower && follow.CommunityId == idCommunity);
+                if (follow != null)
+                {
+                    dbContext.Remove(follow);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
