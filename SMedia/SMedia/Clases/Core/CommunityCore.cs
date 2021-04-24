@@ -103,7 +103,8 @@ namespace SMedia.Clases.Core
                    ).First();
 
                 community.Active = false;
-
+                dbContext.Update(community);
+                dbContext.SaveChanges();
                 return community;
             }
             catch (Exception ex)

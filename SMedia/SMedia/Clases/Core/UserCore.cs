@@ -94,7 +94,8 @@ namespace SMedia.Clases.Core
                    ).First();
 
                 user.Active = false;
-
+                dbContext.Update(user);
+                dbContext.SaveChanges();
                 return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, user.Picture, user.RegisterDate, user.LastLogin);
             }
             catch (Exception ex)
@@ -137,6 +138,8 @@ namespace SMedia.Clases.Core
                 user.Name = sUser.Name;
                 user.LastName = sUser.LastName;
                 user.Picture = sUser.Picture;
+                user.RegisterDate = DateTime.Now;
+                user.LastLogin = DateTime.Now;
 
                 dbContext.User.Add(user);
 

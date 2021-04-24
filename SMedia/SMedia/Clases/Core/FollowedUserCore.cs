@@ -58,7 +58,7 @@ namespace SMedia.Clases.Core
 
                 followedUser.FollowedId = cFollowedUser.FollowedId;
                 followedUser.FollowerId = cFollowedUser.FollowerId;
-
+                followedUser.DateOfFollow = DateTime.Now;
                 dbContext.FollowedUser.Add(followedUser);
 
                 dbContext.SaveChanges();

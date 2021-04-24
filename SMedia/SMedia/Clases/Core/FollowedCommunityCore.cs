@@ -19,7 +19,7 @@ namespace SMedia.Clases.Core
             {
                 List<Community> communities = (
                    from s in dbContext.FollowedCommunity
-                   where s.Id == id
+                   where s.FollowerId == id
                    select s.Community
                    ).ToList();
                 return communities;

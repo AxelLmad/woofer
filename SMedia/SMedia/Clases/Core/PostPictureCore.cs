@@ -17,12 +17,16 @@ namespace SMedia.Clases.Core
         {
             try
             {
+                bool AnyPicture = dbContext.PostPicture.Any(pic => pic.PostId == id);
+                if (AnyPicture) {
                 List<PostPicture> pictures = (
                    from s in dbContext.PostPicture
                    where s.PostId == id
                    select s
                    ).ToList();
                 return pictures;
+                }
+                return null;
             }
             catch (Exception ex)
             {
