@@ -45,21 +45,22 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public bool SaveFavoritePost(int idUser, int idPost)
+        public bool SaveFavoritePost(FavoritePost favoritePost)
         {
             try
             {
-                bool validUser = dbContext.User.Any(user => user.Id == idUser);
-                bool validPost = dbContext.Post.Any(post => post.Id == idPost);
+                bool validUser = dbContext.User.Any(user => user.Id == favoritePost.UserId);
+                bool validPost = dbContext.Post.Any(post => post.Id == favoritePost.PostId);
                 if (validUser && validPost)
                 {
-                    bool anyPost = dbContext.FavoritePost.Any(favPost => favPost.UserId == idUser && favPost.PostId == idPost);
+                    bool anyPost = dbContext.FavoritePost.Any(
+                        favPost => favPost.UserId == favoritePost.UserId && favPost.PostId == favoritePost.PostId);
                     if (!anyPost)
                     {
                         FavoritePost favPost = new FavoritePost
                         {
-                            PostId = idPost,
-                            UserId = idUser
+                            PostId = favoritePost.PostId,
+                            UserId = favoritePost.UserId
                         };
                         dbContext.Add(favPost);
                         dbContext.SaveChanges();

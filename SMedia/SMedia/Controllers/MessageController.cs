@@ -19,7 +19,7 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPut]
+        [HttpPost]
         public IActionResult SendMessage([FromBody] Message message)
         {
             try

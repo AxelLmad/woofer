@@ -14,22 +14,22 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public bool SetViewOnPost(int idUser, int idPost)
+        public bool SetViewOnPost(Viewed view)
         {
             try
             {
-                bool AnyUser = dbContext.User.Any(user => user.Id == idUser);
-                bool AnyPost = dbContext.Post.Any(post => post.Id == idPost);
+                bool AnyUser = dbContext.User.Any(user => user.Id == view.UserId);
+                bool AnyPost = dbContext.Post.Any(post => post.Id == view.PostId);
                 if (AnyUser && AnyUser)
                 {
-                    bool anyViewed = dbContext.Viewed.Any(viewed => viewed.UserId == idUser
-                                                            && viewed.PostId == idPost);
+                    bool anyViewed = dbContext.Viewed.Any(viewed => viewed.UserId == view.UserId
+                                                            && viewed.PostId == view.PostId);
                     if (!anyViewed)
                     {
                         Viewed viewed = new Viewed
                         {
-                            UserId = idUser,
-                            PostId = idPost
+                            UserId = view.UserId,
+                            PostId = view.PostId
                         };
                         dbContext.Add(viewed);
                         dbContext.SaveChanges();

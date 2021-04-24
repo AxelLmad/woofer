@@ -225,44 +225,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public bool SetReactPost(int idPost, int idUser, byte typeReaction)
-        {
-            try
-            {
-                bool AnyUser = dbContext.User.Any(user => user.Id == idUser);
-                bool AnyPost = dbContext.Post.Any(post => post.Id == idPost);
-                if (AnyUser && AnyPost)
-                {
-                    Reaction AnyReaction = dbContext.Reaction.FirstOrDefault(reaction => reaction.PostId == idPost
-                                            && reaction.UserId == idUser);
-                    if (AnyReaction == null)
-                    {
-                        Reaction newReaction = new Reaction
-                        {
-                            UserId = idUser,
-                            PostId = idPost,
-                            Type = typeReaction
-                        };
-                        dbContext.Add(newReaction);
-                        dbContext.SaveChanges();
-                        return true;
-                    }
-                    else
-                    {
-                        AnyReaction.Type = typeReaction;
-                        dbContext.Update(AnyReaction);
-                        dbContext.SaveChanges();
-                        return true;
-                    }
-                }
 
-                return false;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
 
 
         public bool CreateCommunity(Community community)

@@ -36,13 +36,13 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPut("{idUser},{idPost}")]
-        public IActionResult SaveFavoritePost([FromRoute] int idUser, [FromRoute] int idPost)
+        [HttpPost]
+        public IActionResult SaveFavoritePost([FromBody] FavoritePost favoritePost)
         {
             try
             {
                 FavoritePostCore sMediaCore = new FavoritePostCore(dbContext);
-                bool favPosts = sMediaCore.SaveFavoritePost(idUser, idPost);
+                bool favPosts = sMediaCore.SaveFavoritePost(favoritePost);
                 if (favPosts)
                     return Ok("Post guardador satisfactoriamente!");
                 return Ok("No se guardó el post. Se debe enviar id del usuairio y id del post, comprobar tambien: " +

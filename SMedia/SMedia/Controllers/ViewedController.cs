@@ -19,13 +19,13 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPut("{idUser},{idPost}")]
-        public IActionResult SetViewOnPost([FromRoute] int idUser, int idPost)
+        [HttpPut]
+        public IActionResult SetViewOnPost([FromBody]Viewed view)
         {
             try
             {
                 ViewedCore sMediaCore = new ViewedCore(dbContext);
-                bool viewed = sMediaCore.SetViewOnPost(idUser, idPost);
+                bool viewed = sMediaCore.SetViewOnPost(view);
                 if (viewed)
                     return Ok("Vista agregada al Post!");
                 return Ok("Vista no se pudo agregar");
