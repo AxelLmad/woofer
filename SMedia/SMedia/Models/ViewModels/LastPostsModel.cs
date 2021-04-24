@@ -7,6 +7,12 @@ namespace SMedia.Models.ViewModels
 {
     public class LastPostsModel
     {
-        List<Post> LastPost { get; set; }
+        public long Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreationDate { get; set; }
+        public long AuthorId { get; set; }
+        public long CommunityId { get; set; }
+        public long? LastPostId { get; set; }
+        public bool Active { get; set; }
     }
 }
