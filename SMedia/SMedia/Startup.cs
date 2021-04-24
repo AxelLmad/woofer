@@ -38,6 +38,12 @@ namespace SMedia
             services.AddDbContext<SMediaDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SqlConnection"))
             );
+
+            services.AddMvc()
+     .              AddNewtonsoftJson(
+          options => {
+              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+          });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
