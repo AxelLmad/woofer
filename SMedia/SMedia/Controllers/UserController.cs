@@ -24,8 +24,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.GetAllUsers());
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.GetAll());
             }
             catch (Exception ex)
             {
@@ -38,8 +38,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.GetUser(id));
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.ById(id));
             }
             catch (Exception ex)
             {
@@ -52,8 +52,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.Login(user));
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.Login(user));
             }
             catch (Exception ex)
             {
@@ -66,8 +66,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.SignUp(user));
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.SignUp(user));
             }
             catch (Exception ex)
             {
@@ -80,8 +80,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.EditUser(user));
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.Edit(user));
             }
             catch (Exception ex)
             {
@@ -94,8 +94,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.DeleteUser(id));
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.Delete(id));
             }
             catch (Exception ex)
             {

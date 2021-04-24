@@ -19,27 +19,15 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet]
-        public IActionResult All()
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.GetAllUsers());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
+      
 
         [HttpGet("{id}")]
         public IActionResult ById([FromRoute] long id)
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.GetCommunity(id));
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.ById(id));
             }
             catch (Exception ex)
             {
@@ -52,8 +40,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.CreateCommunity(community));
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.Create(community));
             }
             catch (Exception ex)
             {
@@ -66,8 +54,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.EditCommunity(community));
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.Edit(community));
             }
             catch (Exception ex)
             {
@@ -80,8 +68,8 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.DeleteCommunity(id));
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.Delete(id));
             }
             catch (Exception ex)
             {

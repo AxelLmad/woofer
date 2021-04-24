@@ -67,8 +67,9 @@ namespace SMedia.Controllers
         {
             try
             {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                return Ok(sMediaCore.DeleteCommunity(id));
+                FollowedUserCore core = new FollowedUserCore(dbContext);
+                core.Delete(id);
+                return Ok();
             }
             catch (Exception ex)
             {
