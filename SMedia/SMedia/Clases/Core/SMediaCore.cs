@@ -104,22 +104,7 @@ namespace SMedia.Clases.Core
             }
 
         }
-        public List<Post> GetAll()
-        {
-            try
-            {
-                List<Post> Posts = (
-                   from s in dbContext.Post
-                   where s.Active == true
-                   select s
-                   ).ToList();
-                return Posts;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+      
 
         public FixedUser Login(LoginUser loginUser)
         {
@@ -166,7 +151,122 @@ namespace SMedia.Clases.Core
             }
         }
 
-     
+        public Community GetCommunity(long id)
+        {
+            try
+            {
+                Community community = (
+                   from s in dbContext.Community
+                   where s.Id == id
+                   && s.Active == true
+                   select s
+                   ).First();
+                return community;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public long CreateCommunity(CreationCommunity cCommunity)
+        {
+
+            try
+            {
+                Community community = new();
+
+                community.Name = cCommunity.Name;
+                community.Color = cCommunity.Color;
+                community.Description = cCommunity.Description;
+                community.Picture = cCommunity.Picture;
+                community.OwnerId = cCommunity.OwnerId;
+                community.CreationDate = DateTime.Now;
+                community.Active = true;
+
+                dbContext.Community.Add(community);
+
+                dbContext.SaveChanges();
+
+                return community.Id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public long EditCommunity(CreationCommunity cCommunity)
+        {
+
+            try
+            {
+                Community community = (
+                   from s in dbContext.Community
+                   where s.Id == cCommunity.Id
+                   && s.Active == true
+                   select s
+                   ).First();
+
+                community.Name = cCommunity.Name;
+                community.Color = cCommunity.Color;
+                community.Description = cCommunity.Description;
+                community.Picture = cCommunity.Picture;
+                community.OwnerId = cCommunity.OwnerId;
+
+                dbContext.SaveChanges();
+
+                return community.Id;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public Community DeleteCommunity(long id)
+        {
+
+            try
+            {
+                Community community = (
+                   from s in dbContext.Community
+                   where s.Id == id
+                   && s.Active == true
+                   select s
+                   ).First();
+
+                community.Active = false;
+
+                return community;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public List<Post> GetAll()
+        {
+            try
+            {
+                List<Post> Posts = (
+                   from s in dbContext.Post
+                   where s.Active == true
+                   select s
+                   ).ToList();
+                return Posts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public ProfileModel GetProfileModel(int id)
         {
             try
