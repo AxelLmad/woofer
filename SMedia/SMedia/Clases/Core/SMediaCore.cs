@@ -161,56 +161,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public List<Post> GetFavoritePosts(int id)
-        {
-            try
-            {
-                bool anyUser = dbContext.Post.Any(user => user.Id == id);
-                if (anyUser)
-                {
-                    bool anyFavorite = dbContext.FavoritePost.Any(fav => fav.UserId == id);
-                    if (anyFavorite)
-                    {
-                        var FavPost = from FP in dbContext.FavoritePost
-                                          where FP.UserId == id
-                                          select FP;
-                            List<Post> FavoritePosts = (
-                                from LP in dbContext.Post
-                                join FU in FavPost on LP.Id equals FU.PostId
-                                orderby LP.CreationDate
-                                select LP
-                                ).Take(10).ToList();
-                            return FavoritePosts;
-                    }
-                    else { return null; }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        public List<Message> GetMessages(int id)
-        {
-            try
-            {
-                bool anyUser = dbContext.User.Any(user => user.Id == id);
-                bool anyMessage = dbContext.Message.Any(message => message.ReceiverId == id);
-                if (anyUser && anyMessage) {
-                    List<Message> messages = (from M in dbContext.Message
-                                             where (M.ReceiverId == id || M.SenderId == id)
-                                             select M).Take(20).ToList();
-                    return messages;
-                }
-                return null;
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-        }
         public int GetPostViewes(int id)
         {
             try
@@ -280,36 +231,6 @@ namespace SMedia.Clases.Core
                 return false;
             }
             catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public bool SaveFavoritePost(int idUser, int idPost)
-        {
-            try
-            {
-                bool validUser = dbContext.User.Any(user => user.Id == idUser);
-                bool validPost = dbContext.Post.Any(post => post.Id == idPost);
-                if(validUser && validPost)
-                {
-                    bool anyPost = dbContext.FavoritePost.Any(favPost => favPost.UserId == idUser && favPost.PostId == idPost);
-                    if (!anyPost)
-                    {
-                        FavoritePost favPost = new FavoritePost
-                        {
-                            PostId = idPost,
-                            UserId = idUser
-                        };
-                        dbContext.Add(favPost);
-                        dbContext.SaveChanges();
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-            }
-            catch(Exception ex)
             {
                 throw ex;
             }
@@ -452,23 +373,7 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public void SendMessage(Message message)
-        {
-            try
-            {
-                bool validUser = ValidateMessage(message);
-                if (validUser)
-                {
-                    message.Date = DateTime.Now;
-                    dbContext.Add(message);
-                    dbContext.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+
 
         public bool CreateCommunity(Community community)
         {
@@ -626,22 +531,7 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public bool ValidateMessage(Message message)
-        {
-            try
-            {
 
-                if (string.IsNullOrEmpty(message.Content) || message?.Sender != null || message?.Receiver != null)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
     }
 }

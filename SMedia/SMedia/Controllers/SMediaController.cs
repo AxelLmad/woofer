@@ -41,40 +41,6 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetLastPosts([FromRoute] int id)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                List<Post> lastposts = sMediaCore.GetLastPosts(id);
-                if (lastposts != null)
-                    return Ok(lastposts);
-                return Ok("No hay posts!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetFavoritePosts([FromRoute] int id)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                List<Post> favPosts = sMediaCore.GetFavoritePosts(id);
-                if (favPosts != null)
-                    return Ok(favPosts);
-                return Ok("No tienes posts guardados!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpGet("{id}")]
         public IActionResult GetFollowedUsers([FromRoute] int id)
         {
             try
@@ -108,39 +74,6 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetMessages([FromRoute] int id)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                List<Message> messages = sMediaCore.GetMessages(id);
-                if (messages != null)
-                    return Ok(messages);
-                return Ok("No hay mensajes!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetPostViewes([FromRoute] int id)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                int viewes = sMediaCore.GetPostViewes(id);
-                if (viewes != -1)
-                    return Ok(viewes);
-                return Ok("No hay vistas! Algo salió mal");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
         [HttpPost]
         [Route("{NickName}")]
         public IActionResult Login([FromRoute] string NickName,[FromBody] string Password)
@@ -152,42 +85,6 @@ namespace SMedia.Controllers
                 if (idUser != -1)
                     return Ok(idUser);
                 return Ok("No hay usuario con: " + idUser);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpPut("{idUser},{idPost}")]
-        public IActionResult SetViewOnPost([FromRoute] int idUser, int idPost)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                bool viewed = sMediaCore.SetViewOnPost(idUser, idPost);
-                if (viewed)
-                    return Ok("Vista agregada al Post!");
-                return Ok("Vista no se pudo agregar");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpPut("{idUser},{idPost}")]
-        public IActionResult SaveFavoritePost([FromRoute] int idUser, [FromRoute] int idPost)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                bool favPosts = sMediaCore.SaveFavoritePost(idUser, idPost);
-                if (favPosts)
-                    return Ok("Post guardador satisfactoriamente!");
-                return Ok("No se guardó el post. Se debe enviar id del usuairio y id del post, comprobar tambien: " +
-                    "\n El id del post y del usuario existen" +
-                    "\n No existe ya esa combinación de post y id. No duplicar en BD");
             }
             catch (Exception ex)
             {
@@ -234,25 +131,6 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPut("{idPost},{idUser},{typeReaction}")]
-        public IActionResult SetReactPost([FromRoute] int idPost, [FromRoute] int idUser, byte typeReaction)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                bool newReaction = sMediaCore.SetReactPost(idPost, idUser, typeReaction);
-                if (newReaction)
-                    return Ok(idUser + " Reaccionó con " + typeReaction + " a la publicación " + idPost);
-                return Ok("No se pudo reaccionar al Post" + idPost +
-                    ". Se debe enviar id del usuario que reacciona y id del post a reaccionar, comprobar tambien: " +
-                    "\n No existe ya esa combinación de seguidor y comunidad. No se puede reaccionar 2 veces en BD!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
         [HttpPut]
         public IActionResult SignIn([FromBody] User user)
         {
@@ -268,37 +146,6 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPut]
-        public IActionResult CreatePost([FromBody] Post post)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                bool exito = sMediaCore.CreatePost(post);
-                if (exito)
-                    return Ok("Post created succesfully!");
-                return Ok("Post no valido");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-        [HttpPut]
-        public IActionResult SendMessage([FromBody] Message message)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                sMediaCore.SendMessage(message);
-                return Ok("Message created succesfully!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
         [HttpPut]
         public IActionResult CreateCommunity([FromBody] Community community)
         {
@@ -333,22 +180,6 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult DisablePost([FromRoute] int id)
-        {
-            try
-            {
-                SMediaCore sMediaCore = new SMediaCore(dbContext);
-                bool DisabledPost = sMediaCore.DisablePost(id);
-                if (DisabledPost)
-                    return Ok("Post eliminado!");
-                return Ok("No se pudo eliminar el post con id: " + id);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
         [HttpPut("{id}")]
         public IActionResult DisableCommunity([FromRoute] int id)
         {
