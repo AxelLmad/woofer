@@ -14,11 +14,11 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public List<Message> GetMessages(int id)
+        public List<Message> GetMessages(long id)
         {
             try
             {
-                bool anyUser = dbContext.User.Any(user => user.Id == id);
+                bool anyUser = dbContext.User.Any(user => user.Id == id && user.Active);
                 bool anyMessage = dbContext.Message.Any(message => message.ReceiverId == id);
                 if (anyUser && anyMessage)
                 {
@@ -35,17 +35,19 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public void SendMessage(Message message)
+        public bool SendMessage(Message message)
         {
             try
             {
-                bool validUser = ValidateMessage(message);
-                if (validUser)
+                bool validMessage = ValidateMessage(message);
+                if (validMessage)
                 {
                     message.Date = DateTime.Now;
                     dbContext.Add(message);
                     dbContext.SaveChanges();
+                    return true;
                 }
+                return false;
             }
             catch (Exception ex)
             {
@@ -53,24 +55,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public bool ValidateMessage(Message message)
-        {
-            try
-            {
-
-                if (string.IsNullOrEmpty(message.Content) || message?.Sender != null || message?.Receiver != null)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public bool DeleteMessage(int id)
+        public bool DeleteMessage(long id)
         {
             try
             {
@@ -82,6 +67,23 @@ namespace SMedia.Clases.Core
                     return true;
                 }
                 return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool ValidateMessage(Message message)
+        {
+            try
+            {
+                bool anyUser = dbContext.User.Any(u => u.Id == message.SenderId && u.Active);
+                bool anyUser2 = dbContext.User.Any(u => u.Id == message.ReceiverId && u.Active);
+                if (string.IsNullOrEmpty(message.Content) || message?.Sender != null || message?.Receiver != null 
+                            || !anyUser || !anyUser2)
+                    return false;
+                return true;
             }
             catch (Exception ex)
             {

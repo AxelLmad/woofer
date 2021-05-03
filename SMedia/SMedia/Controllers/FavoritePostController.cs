@@ -20,7 +20,7 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetFavoritePosts([FromRoute] int id)
+        public IActionResult GetFavoritePosts([FromRoute] long id)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace SMedia.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteFavoritePost([FromRoute] int id)
+        public IActionResult DeleteFavoritePost([FromRoute] long id)
         {
             try
             {

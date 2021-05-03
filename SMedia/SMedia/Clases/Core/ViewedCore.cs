@@ -14,7 +14,7 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public bool SetViewOnPost(Viewed view)
+        public bool SetViewOnPost(setView view)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public int GetPostViewes(int id)
+        public long GetPostViewes(long id)
         {
             try
             {

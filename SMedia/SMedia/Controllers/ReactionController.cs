@@ -37,5 +37,18 @@ namespace SMedia.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
+        [HttpPost]
+        public IActionResult GetReaction([FromBody] GetReaction reaction)
+        {
+            try
+            {
+                ReactionCore sMediaCore = new ReactionCore(dbContext);
+                return Ok(sMediaCore.GetReaction(reaction));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
     }
 }

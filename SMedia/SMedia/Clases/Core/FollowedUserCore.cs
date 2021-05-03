@@ -17,12 +17,16 @@ namespace SMedia.Clases.Core
         {
             try
             {
-                List<User> followedUsers = (
-                   from s in dbContext.FollowedUser
-                   where s.FollowerId == followerId
-                   select s.Followed
-                   ).ToList();
-                return followedUsers;
+                bool anyUser = dbContext.User.Any(u => u.Id == followerId);
+                if (anyUser) {                 
+                    List<User> followedUsers = (
+                        from s in dbContext.FollowedUser
+                        where s.FollowerId == followerId
+                        select s.Followed
+                        ).ToList();
+                    return followedUsers;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -54,16 +58,18 @@ namespace SMedia.Clases.Core
 
             try
             {
-                FollowedUser followedUser = new();
-
-                followedUser.FollowedId = cFollowedUser.FollowedId;
-                followedUser.FollowerId = cFollowedUser.FollowerId;
-                followedUser.DateOfFollow = DateTime.Now;
-                dbContext.FollowedUser.Add(followedUser);
-
-                dbContext.SaveChanges();
-
-                return followedUser;
+                bool validFollow = validateFollow(cFollowedUser);
+                if (validFollow) 
+                {
+                    FollowedUser followedUser = new();
+                    followedUser.FollowedId = cFollowedUser.FollowedId;
+                    followedUser.FollowerId = cFollowedUser.FollowerId;
+                    followedUser.DateOfFollow = DateTime.Now;
+                    dbContext.FollowedUser.Add(followedUser);
+                    dbContext.SaveChanges();
+                    return followedUser;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -72,7 +78,7 @@ namespace SMedia.Clases.Core
 
         }
 
-        public void Delete(long id)
+        public bool Delete(long id)
         {
 
             try
@@ -81,17 +87,31 @@ namespace SMedia.Clases.Core
                    from s in dbContext.FollowedUser
                    where s.Id == id
                    select s
-                   ).First();
-
-                dbContext.FollowedUser.Remove(followedUser);
-                dbContext.SaveChanges();
-
+                   ).FirstOrDefault();
+                if (followedUser != null)
+                {
+                    dbContext.FollowedUser.Remove(followedUser);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
+        }
+
+        public bool validateFollow(CreationFollowedUser cFollowedUser)
+        {
+            bool validUser = dbContext.User.Any(u => u.Id == cFollowedUser.FollowedId);
+            bool validUser2 = dbContext.User.Any(u => u.Id == cFollowedUser.FollowerId);
+            bool anyFollow = dbContext.FollowedUser.Any(fu => fu.FollowedId == cFollowedUser.FollowedId
+                                                            && fu.FollowerId == cFollowedUser.FollowerId);
+            if (validUser && validUser2 && !anyFollow)
+                return true;
+            return false;
         }
 
     }

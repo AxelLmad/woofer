@@ -14,38 +14,66 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public List<Post> GetLastPosts(int id)
+        public List<Post> GetLastPosts(long id)
         {
             try
             {
+                int typeFeed = TypeFeed(id);
                 bool anyUser = dbContext.Post.Any(user => user.Id == id && user.Active);
-                if (anyUser)
+                if (anyUser && typeFeed != -1)
                 {
-                    bool anyFollower = dbContext.FollowedUser.Any(follower => follower.FollowerId == id);
-                    if (anyFollower)
+                    switch (typeFeed)
                     {
-                        var UserIFollow = from FU in dbContext.FollowedUser
-                                          where FU.FollowerId == id
-                                          select FU;
-                        bool anyCommunity = dbContext.FollowedCommunity.Any(comm => comm.FollowerId == id);
-                        if (anyCommunity)
-                        {
-                            var CommIFollow = from FC in dbContext.FollowedCommunity
+                        case 2: // User follows both a page and user minimum
+                            var UserIFollow2 = from FU in dbContext.FollowedUser
+                                              where FU.FollowerId == id
+                                              select FU;
+                            var CommIFollow2 = from FC in dbContext.FollowedCommunity
                                               where FC.FollowerId == id
                                               select FC;
-                            List<Post> LastPosts = (
+                            List<Post> LastPosts2 = (
                                 from LP in dbContext.Post
-                                join FU in UserIFollow on LP.AuthorId equals FU.FollowedId
-                                join FC in CommIFollow on LP.CommunityId equals FC.CommunityId
+                                join FC in CommIFollow2 on LP.CommunityId equals FC.CommunityId
                                 where LP.Active
                                 orderby LP.CreationDate
                                 select LP
                                 ).Take(10).ToList();
-                            return LastPosts;
-                        }
-                        else { return null; }
+                            List<Post> UserPosts = (
+                                from LP in dbContext.Post
+                                join FU in UserIFollow2 on LP.AuthorId equals FU.FollowedId
+                                where LP.Active
+                                orderby LP.CreationDate
+                                select LP).Take(10).ToList();
+                            LastPosts2.AddRange(UserPosts);
+                            return LastPosts2;
+                        case 1: // User follows a User minimun
+                            var UserIFollow1 = from FU in dbContext.FollowedUser
+                                              where FU.FollowerId == id
+                                              select FU;
+                            List<Post> LastPosts1 = (
+                                from LP in dbContext.Post
+                                join FU in UserIFollow1 on LP.AuthorId equals FU.FollowedId
+                                where LP.Active
+                                orderby LP.CreationDate
+                                select LP).Take(10).ToList();
+                            return LastPosts1;
+                        case 0: // User follows a community minimum
+                            var CommIFollow0 = from FC in dbContext.FollowedCommunity
+                                              where FC.FollowerId == id
+                                              select FC;
+                            List<Post> LastPosts0 = (
+                                from LP in dbContext.Post
+                                join FC in CommIFollow0 on LP.CommunityId equals FC.CommunityId
+                                where LP.Active
+                                orderby LP.CreationDate
+                                select LP
+                                ).Take(10).ToList();
+                            return LastPosts0;
+                        case -1:
+                            return null;
+                        default:
+                            return null;
                     }
-                    else { return null; }
                 }
                 return null;
             }
@@ -54,18 +82,22 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-
-        public bool CreatePost(Post newpost)
+        public bool CreatePost(CreationPost post)
         {
             try
             {
 
-                bool validPost = ValidatePost(newpost);
+                bool validPost = ValidatePost(post);
                 if (validPost)
                 {
-                    newpost.CreationDate = DateTime.Now;
-                    newpost.Active = true;
-                    dbContext.Add(newpost);
+                    Post newPost = new();
+                    newPost.AuthorId = post.AuthorId;
+                    newPost.CommunityId = post.CommunityId;
+                    newPost.Content = post.Content;
+                    newPost.CreationDate = DateTime.Now;
+                    newPost.Active = true;
+                    newPost.LastPostId = post.lastPostId;
+                    dbContext.Add(newPost);
                     dbContext.SaveChanges();
                     return true;
                 }
@@ -77,7 +109,7 @@ namespace SMedia.Clases.Core
             }
         }
 
-        public bool DisablePost(int id)
+        public bool DisablePost(long id)
         {
             try
             {
@@ -96,7 +128,19 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public bool ValidatePost(Post post)
+        public int TypeFeed(long id)
+        {
+            bool anyFollower = dbContext.FollowedUser.Any(follower => follower.FollowerId == id);
+            bool anyCommunity = dbContext.FollowedCommunity.Any(comm => comm.FollowerId == id);
+            if (anyCommunity && anyFollower)
+                return 2;
+            if (anyFollower)
+                return 1;
+            if (anyCommunity)
+                return 0;
+            return -1;
+        }
+        public bool ValidatePost(CreationPost post)
         {
             try
             {

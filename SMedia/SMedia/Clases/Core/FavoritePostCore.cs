@@ -1,4 +1,5 @@
 ﻿using SMedia.Models;
+using SMedia.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public List<Post> GetFavoritePosts(int id)
+        public List<Post> GetFavoritePosts(long id)
         {
             try
             {
@@ -77,7 +78,7 @@ namespace SMedia.Clases.Core
         }
 
 
-        public bool DeleteFavoritePost(int id)
+        public bool DeleteFavoritePost(long id)
         {
             try
             {

@@ -51,5 +51,33 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+        public ReactionType GetReaction(GetReaction reaction)
+        {
+            try
+            {
+                bool anyPost = dbContext.Post.Any(p => p.Id == reaction.PostId && p.Active);
+                bool anyUser = dbContext.User.Any(u => u.Id == reaction.UserId && u.Active);
+                if (anyPost && anyUser && reaction.Type >= 0 && reaction.Type <= 3) 
+                {
+                    ReactionType reactionType = new();
+                    var items = (from R in dbContext.Reaction
+                                 where (R.PostId == reaction.PostId && R.Type == reaction.Type)
+                                 select R);
+                    int count = items.Count();
+                    reactionType.Amount = count;
+                    reactionType.CurrentUser = false;
+                    reactionType.Type = reaction.Type;
+                    bool anyReactionType = dbContext.Reaction.Any(r => r.UserId == reaction.UserId);
+                    if (anyReactionType)
+                        reactionType.CurrentUser = true;
+                    return reactionType;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

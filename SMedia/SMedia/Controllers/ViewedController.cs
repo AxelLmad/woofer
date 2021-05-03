@@ -20,7 +20,7 @@ namespace SMedia.Controllers
         }
 
         [HttpPut]
-        public IActionResult SetViewOnPost([FromBody]Viewed view)
+        public IActionResult SetViewOnPost([FromBody]setView view)
         {
             try
             {
@@ -37,12 +37,12 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetPostViewes([FromRoute] int id)
+        public IActionResult GetPostViewes([FromRoute] long id)
         {
             try
             {
                 ViewedCore sMediaCore = new ViewedCore(dbContext);
-                int viewes = sMediaCore.GetPostViewes(id);
+                long viewes = sMediaCore.GetPostViewes(id);
                 if (viewes != -1)
                     return Ok(viewes);
                 return Ok("No hay vistas! Algo salió mal");

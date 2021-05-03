@@ -20,7 +20,7 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetLastPosts([FromRoute] int id)
+        public IActionResult GetLastPosts([FromRoute] long id)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace SMedia.Controllers
         }
 
         [HttpPut]
-        public IActionResult CreatePost([FromBody] Post post)
+        public IActionResult CreatePost([FromBody] CreationPost post)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace SMedia.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult DisablePost([FromRoute] int id)
+        public IActionResult DisablePost([FromRoute] long id)
         {
             try
             {

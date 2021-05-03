@@ -19,23 +19,8 @@ namespace SMedia.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpPost]
-        public IActionResult SendMessage([FromBody] Message message)
-        {
-            try
-            {
-                MessageCore sMessageCore = new MessageCore(dbContext);
-                sMessageCore.SendMessage(message);
-                return Ok("Message created succesfully!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
         [HttpGet("{id}")]
-        public IActionResult GetMessages([FromRoute] int id)
+        public IActionResult GetMessages([FromRoute] long id)
         {
             try
             {
@@ -51,8 +36,25 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult SendMessage([FromBody] Message message)
+        {
+            try
+            {
+                MessageCore sMessageCore = new MessageCore(dbContext);
+                bool sended = sMessageCore.SendMessage(message);
+                if(sended)
+                    return Ok("Message created succesfully!");
+                return Ok("Couldn't send message");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteMessage([FromRoute] int id)
+        public IActionResult DeleteMessage([FromRoute] long id)
         {
             try
             {

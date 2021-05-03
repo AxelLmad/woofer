@@ -36,17 +36,18 @@ namespace SMedia.Clases.Core
 
             try
             {
-                FollowedCommunity followedCommunity = new();
-
-                followedCommunity.CommunityId = cFollowedCommunity.CommunityId;
-                followedCommunity.FollowerId = cFollowedCommunity.FollowerId;
-                followedCommunity.DateOfFollow = DateTime.Now;
-
-                dbContext.FollowedCommunity.Add(followedCommunity);
-
-                dbContext.SaveChanges();
-
-                return followedCommunity;
+                bool validFollow = validateFollow(cFollowedCommunity);
+                if (validFollow)
+                {
+                    FollowedCommunity followedCommunity = new();
+                    followedCommunity.CommunityId = cFollowedCommunity.CommunityId;
+                    followedCommunity.FollowerId = cFollowedCommunity.FollowerId;
+                    followedCommunity.DateOfFollow = DateTime.Now;
+                    dbContext.FollowedCommunity.Add(followedCommunity);
+                    dbContext.SaveChanges();
+                    return followedCommunity;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace SMedia.Clases.Core
 
         }
 
-        public void Delete(long id)
+        public bool Delete(long id)
         {
 
             try
@@ -64,17 +65,33 @@ namespace SMedia.Clases.Core
                    from s in dbContext.FollowedCommunity
                    where s.Id == id
                    select s
-                   ).First();
-
-                dbContext.FollowedCommunity.Remove(followedCommunity);
-                dbContext.SaveChanges();
-
+                   ).FirstOrDefault();
+                if (followedCommunity != null)
+                {
+                    dbContext.FollowedCommunity.Remove(followedCommunity);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
+        }
+
+        public bool validateFollow(CreationFollowedCommunity follow)
+        {
+            
+
+            bool anyUser = dbContext.User.Any(u => u.Id == follow.FollowerId);
+            bool anyCommunity = dbContext.Community.Any(c => c.Id == follow.CommunityId);
+            bool anyFollowedCommunity = dbContext.FollowedCommunity.Any(fc => fc.CommunityId == follow.CommunityId
+                                                                        && fc.FollowerId == follow.FollowerId);
+            if (anyUser && anyCommunity && !anyFollowedCommunity)
+                return true;
+            return false;
         }
 
     }

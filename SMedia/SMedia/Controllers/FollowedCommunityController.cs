@@ -54,8 +54,10 @@ namespace SMedia.Controllers
             try
             {
                 FollowedCommunityCore core = new FollowedCommunityCore(dbContext);
-                core.Delete(id);
-                return Ok();
+                bool succes = core.Delete(id);
+                if(succes)
+                    return Ok();
+                return NotFound();
             }
             catch (Exception ex)
             {

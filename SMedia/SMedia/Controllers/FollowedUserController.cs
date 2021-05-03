@@ -68,8 +68,10 @@ namespace SMedia.Controllers
             try
             {
                 FollowedUserCore core = new FollowedUserCore(dbContext);
-                core.Delete(id);
-                return Ok();
+                bool follow = core.Delete(id);
+                if(follow)
+                    return Ok();
+                return NotFound();
             }
             catch (Exception ex)
             {
