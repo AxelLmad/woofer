@@ -5,6 +5,26 @@ using System.Threading.Tasks;
 
 namespace SMedia.Models
 {
+    public class CreationCommunity
+    {
+        public CreationCommunity(string Name, string Color, string Description, string Picture, long OwnerId)
+        {
+
+                this.Name = Name;
+                this.Color = Color;
+                this.Description = Description;
+                this.Picture = Picture;
+                this.OwnerId = OwnerId;
+
+        }
+        public long? Id { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public string Description { get; set; }
+        public string? Picture { get; set; }
+        public long OwnerId { get; set; }
+
+    }
     public class Community
     {
         public long Id { get; set; }

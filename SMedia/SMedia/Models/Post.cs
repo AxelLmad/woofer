@@ -5,6 +5,13 @@ using System.Threading.Tasks;
 
 namespace SMedia.Models
 {
+    public class CreationPost
+    {
+        public string Content { get; set; }
+        public long AuthorId { get; set; }
+        public long CommunityId { get; set; }
+        public long? lastPostId { get; set; }
+    }
     public class Post
     {
         public long Id { get; set; }

@@ -213,7 +213,7 @@ namespace SMedia.Models
 
                 entity.HasOne(e=>e.Post)
                     .WithMany(y => y.PostPicture)
-                    .HasForeignKey("FK__PostPictu__PostI__31EC6D26");
+                    .HasConstraintName("FK__PostPictu__PostI__31EC6D26");
             });
 
             modelBuilder.Entity<Reaction>(entity =>
