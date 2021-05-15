@@ -15,6 +15,18 @@ class Publisher extends React.Component{
         }
 
         this.toggleOpenModal = this.toggleOpenModal.bind(this);
+        this.modalWindow = this.modalWindow.bind(this);
+        this.publish = this.publish.bind(this);
+    }
+
+    handleContentChange($e) {
+        this.setState({nickname: $e.target.value});
+    };
+
+    publish() {
+
+
+
     }
 
     modalWindow(){
@@ -26,14 +38,16 @@ class Publisher extends React.Component{
                 <button onClick={()=>this.toggleOpenModal()} className={"transform scale-150 ml-8 text-white "}>
                     <img src={backIcon} alt="Back"/>
                 </button>
-                <button className={"rounded-full w-32 h-8 font-bold text-dark bg-light hover:bg-primary ml-40 mr-4 md:mr-12"}>Publicar</button>
+                <button onClick={this.publish()}
+                    className={"rounded-full w-32 h-8 font-bold text-dark bg-light hover:bg-primary ml-40 mr-4 md:mr-12"}>Publicar</button>
            </div>
             <div className={"flex flex-row border-lg mt-12 h-full md:ml-8 xl:ml-48"}>
                 <figure className={"ml-4 mr-4 mt-2"}>
                     <img className={"rounded-full w-12"}
                          src="https://scontent.fmty1-1.fna.fbcdn.net/v/t1.6435-9/46051495_10213185968027882_5149631763173081088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=BzpWfsQmnTMAX9u6jcp&_nc_ht=scontent.fmty1-1.fna&oh=7957e60b699260398f3e310dcb99f272&oe=608DED45" alt="personaje"/>
                 </figure>
-                <textarea className={"w-3/4 h-auto bg-gray-900 py-4 px-2 resize-none"}/>
+                <textarea onChange={this.handleContentChange}
+                    className={"w-3/4 h-auto bg-gray-900 py-4 px-2 resize-none"}/>
             </div>
             <div className={"flex flex-row mt-2  w-5/6 justify-around md:justify-between md:ml-16 md:w-2/3 md:self-center md:mr-4 self-end"}>
                 <button><img className={"transform scale-150"} src={picIcon} alt="Imagen"/></button>
@@ -87,8 +101,7 @@ class Publisher extends React.Component{
                 hover:bg-light hover:text-dark cursor-text text-gray-300`}>
                     ¿De qué conversamos, {this.props.username}?</div>
 
-                <Modal open={this.state.openModal}
-                        >
+                <Modal open={this.state.openModal}>
                     {this.modalWindow()}
                 </Modal>
             </section>

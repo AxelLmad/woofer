@@ -169,10 +169,14 @@ namespace SMedia.Clases.Core
         }
         public bool validUser(SignUpUser user)
         {
-            bool anyUser = dbContext.User.Any(u => u.Name == user.Name);
+            bool anyUser = dbContext.User.Any(u => u.NickName == user.NickName);
+            bool anyEmail = dbContext.User.Any(u => u.Email == user.Email);
             if (string.IsNullOrEmpty(user.NickName) || string.IsNullOrEmpty(user.Password) || string.IsNullOrEmpty(user.Email)
-                || string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.LastName) || anyUser)
+                || string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.LastName) || anyUser || anyEmail)
+            {
                 return false;
+            }
+                
             return true;
         }
 

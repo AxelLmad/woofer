@@ -30,6 +30,11 @@ namespace SMedia
         {
 
             services.AddControllers();
+            services.AddCors(options => { 
+                
+                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().WithHeaders("content-type"));
+            
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SMedia", Version = "v1" });
@@ -61,6 +66,8 @@ namespace SMedia
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

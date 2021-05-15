@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using SMedia.Clases.Core;
 using SMedia.Models;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SMedia.Controllers
 {
+    [EnableCors()]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class PostController : Controller
@@ -36,7 +38,7 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         public IActionResult CreatePost([FromBody] CreationPost post)
         {
             try

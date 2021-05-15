@@ -1,10 +1,21 @@
 import React from 'react';
 import {Post} from "../../models/post";
 import Feed from "../shared_components/feed/feed";
-import Layout from "../layout/layout";
 import Publisher from "../shared_components/publisher/publisher";
 
 class Home extends React.Component{
+
+    constructor() {
+        super();
+
+        const userNickname = JSON.parse(localStorage.getItem('woofer-user-ac'));
+
+        if (userNickname === null || userNickname === undefined || userNickname.acc === ''){
+
+            window.location.href = 'http://localhost:3000/login';
+
+        }
+    }
 
     posts = [
         new Post(0, 'Is naruto the besta anime ever?', '03-04-2021', {name: 'Jane Doe', nickname: 'janedoe'}, {name: 'Naruto'}),
@@ -14,12 +25,12 @@ class Home extends React.Component{
     render(){
 
         return(
-            <Layout>
+
                 <div className={"flex flex-col w-full items-center mt-16"}>
-                    <Publisher/>
+                    <Publisher username={JSON.parse(localStorage.getItem('woofer-user-ac')).acc}/>
                     <Feed posts={this.posts}/>
                 </div>
-            </Layout>
+
         );
 
     }

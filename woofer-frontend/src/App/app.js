@@ -4,6 +4,7 @@ import {Helmet} from 'react-helmet';
 import Login from "./login/login";
 import Layout from "./layout/layout";
 import Home from "./home/home";
+import Signup from "./signup/signup";
 
 class App extends React.Component{
 
@@ -21,22 +22,31 @@ class App extends React.Component{
                     <Switch>
 
                         <Route exact path='/'>
-                            <Home/>
+                            <Layout>
+                                <Home/>
+                            </Layout>
                         </Route>
 
                         <Route exact path='/login'>
-                            <Login/>
+
+                                <Login/>
+
                         </Route>
 
+                        <Route exact path='/register'>
 
+                                <Signup/>
+
+                        </Route>
 
                         <Route exact path='/test'>
                             <Layout>
-                                Test
+                                hh
                             </Layout>
                         </Route>
                     </Switch>
                 </BrowserRouter>
+
             </main>
         )
     }
