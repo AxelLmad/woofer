@@ -1,4 +1,5 @@
 ﻿using SMedia.Models;
+using SMedia.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,66 +15,67 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
-        public List<Post> GetLastPosts(long id)
+        public List<LastPostsModel> GetLastPosts(long id)
         {
             try
             {
                 int typeFeed = TypeFeed(id);
                 bool anyUser = dbContext.Post.Any(user => user.Id == id && user.Active);
-                if (anyUser && typeFeed != -1)
+                if (typeFeed != -1)
                 {
-                    switch (typeFeed)
-                    {
-                        case 2: // User follows both a page and user minimum
-                            var UserIFollow2 = from FU in dbContext.FollowedUser
-                                              where FU.FollowerId == id
-                                              select FU;
-                            var CommIFollow2 = from FC in dbContext.FollowedCommunity
-                                              where FC.FollowerId == id
-                                              select FC;
-                            List<Post> LastPosts2 = (
-                                from LP in dbContext.Post
-                                join FC in CommIFollow2 on LP.CommunityId equals FC.CommunityId
-                                where LP.Active
-                                orderby LP.CreationDate
-                                select LP
-                                ).Take(10).ToList();
-                            List<Post> UserPosts = (
-                                from LP in dbContext.Post
-                                join FU in UserIFollow2 on LP.AuthorId equals FU.FollowedId
-                                where LP.Active
-                                orderby LP.CreationDate
-                                select LP).Take(10).ToList();
-                            LastPosts2.AddRange(UserPosts);
-                            return LastPosts2;
-                        case 1: // User follows a User minimun
-                            var UserIFollow1 = from FU in dbContext.FollowedUser
-                                              where FU.FollowerId == id
-                                              select FU;
-                            List<Post> LastPosts1 = (
-                                from LP in dbContext.Post
-                                join FU in UserIFollow1 on LP.AuthorId equals FU.FollowedId
-                                where LP.Active
-                                orderby LP.CreationDate
-                                select LP).Take(10).ToList();
-                            return LastPosts1;
-                        case 0: // User follows a community minimum
-                            var CommIFollow0 = from FC in dbContext.FollowedCommunity
-                                              where FC.FollowerId == id
-                                              select FC;
-                            List<Post> LastPosts0 = (
-                                from LP in dbContext.Post
-                                join FC in CommIFollow0 on LP.CommunityId equals FC.CommunityId
-                                where LP.Active
-                                orderby LP.CreationDate
-                                select LP
-                                ).Take(10).ToList();
-                            return LastPosts0;
-                        case -1:
-                            return null;
-                        default:
-                            return null;
-                    }
+                    var UserIFollow2 = from FU in dbContext.FollowedUser
+                                       where FU.FollowerId == id
+                                       select FU;
+                    var CommIFollow2 = from FC in dbContext.FollowedCommunity
+                                       where FC.FollowerId == id
+                                       select FC;
+                    List<LastPostsModel> LastPosts2 = (
+                        from LP in dbContext.Post
+                        join FC in CommIFollow2 on LP.CommunityId equals FC.CommunityId
+                        join C in dbContext.Community on FC.CommunityId equals C.Id
+                        join U in dbContext.User on LP.AuthorId equals U.Id
+                        where LP.Active
+                        orderby LP.CreationDate
+                        select new LastPostsModel()
+                        {
+                            Id = LP.Id,
+                            Content = LP.Content,
+                            CreationDate = LP.CreationDate,
+                            AuthorId = LP.AuthorId,
+                            Name = U.Name,
+                            LastName = U.LastName,
+                            NickName = U.NickName,
+                            CommunityId = LP.CommunityId,
+                            CommunityName = C.Name,
+                            Color = C.Color,
+                            LastPostId = LP.LastPostId,
+                            Active = LP.Active
+                        }
+                        ).Take(20).ToList();
+                    List<LastPostsModel> UserPosts = (
+                        from LP in dbContext.Post
+                        join FU in UserIFollow2 on LP.AuthorId equals FU.FollowedId
+                        join U in dbContext.User on FU.FollowedId equals U.Id
+                        join C in dbContext.Community on LP.CommunityId equals C.Id
+                        where LP.Active
+                        orderby LP.CreationDate
+                        select new LastPostsModel()
+                        {
+                            Id = LP.Id,
+                            Content = LP.Content,
+                            CreationDate = LP.CreationDate,
+                            AuthorId = LP.AuthorId,
+                            Name = U.Name,
+                            LastName = U.LastName,
+                            NickName = U.NickName,
+                            CommunityId = LP.CommunityId,
+                            CommunityName = C.Name,
+                            Color = C.Color,
+                            LastPostId = LP.LastPostId,
+                            Active = LP.Active
+                        }).Take(10).ToList();
+                    List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
+                    return lp;
                 }
                 return null;
             }
@@ -99,6 +101,12 @@ namespace SMedia.Clases.Core
                     newPost.LastPostId = post.lastPostId;
                     dbContext.Add(newPost);
                     dbContext.SaveChanges();
+                    newPost = dbContext.Post.OrderBy(x=>x.Id).Last();
+                    PostPicture picture = new();
+                    picture.ServerPath = post.ServerPathImg;
+                    picture.PostId = newPost.Id;
+                    dbContext.Add(picture);
+                    dbContext.SaveChanges();
                     return true;
                 }
                 return false;
@@ -108,7 +116,6 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-
         public bool DisablePost(long id)
         {
             try
@@ -144,8 +151,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-
-                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId != null || post?.CommunityId != null)
+                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId == null || post?.CommunityId == null)
                 {
                     return false;
                 }
