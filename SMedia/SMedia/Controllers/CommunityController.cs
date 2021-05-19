@@ -52,6 +52,20 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetRandomCommunity()
+        {
+            try
+            {
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.GetRandomCommunity());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(CreationCommunity community)
         {

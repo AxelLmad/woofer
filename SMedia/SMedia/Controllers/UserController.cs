@@ -49,6 +49,20 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetRandomUser()
+        {
+            try
+            {
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.GetRandomUser());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult Login(LoginUser user)
         {
