@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SMedia.Clases.Core;
 using SMedia.Models;
+using SMedia.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace SMedia.Controllers
             try
             {
                 PostCore sMediaCore = new PostCore(dbContext);
-                List<Post> lastposts = sMediaCore.GetLastPosts(id);
+                List<LastPostsModel> lastposts = sMediaCore.GetLastPosts(id);
                 if (lastposts != null)
                     return Ok(lastposts);
                 return Ok("No hay posts!");

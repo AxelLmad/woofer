@@ -30,6 +30,26 @@ namespace SMedia.Clases.Core
 
         }
 
+        public List<Community> UserCreatedCommunity(long id)
+        {
+            try
+            {
+                bool AnyUser = dbContext.User.Any(u => u.Id == id && u.Active);
+                if (AnyUser)
+                {
+                    List<Community> UserCommunities = (from C in dbContext.Community
+                                                       where (C.OwnerId == id && C.Active)
+                                                       select C).ToList();
+                    return UserCommunities;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public long Create(CreationCommunity cCommunity)
         {
 
@@ -132,6 +152,8 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+
+
 
     }
 }
