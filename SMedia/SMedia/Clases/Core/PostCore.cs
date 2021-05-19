@@ -101,6 +101,12 @@ namespace SMedia.Clases.Core
                     newPost.LastPostId = post.lastPostId;
                     dbContext.Add(newPost);
                     dbContext.SaveChanges();
+                    newPost = dbContext.Post.OrderBy(x=>x.Id).Last();
+                    PostPicture picture = new();
+                    picture.ServerPath = post.ServerPathImg;
+                    picture.PostId = newPost.Id;
+                    dbContext.Add(picture);
+                    dbContext.SaveChanges();
                     return true;
                 }
                 return false;
@@ -110,7 +116,6 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-
         public bool DisablePost(long id)
         {
             try
@@ -146,8 +151,7 @@ namespace SMedia.Clases.Core
         {
             try
             {
-
-                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId != null || post?.CommunityId != null)
+                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId == null || post?.CommunityId == null)
                 {
                     return false;
                 }

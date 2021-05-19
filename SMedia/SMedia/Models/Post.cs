@@ -11,6 +11,7 @@ namespace SMedia.Models
         public long AuthorId { get; set; }
         public long CommunityId { get; set; }
         public long? lastPostId { get; set; }
+        public string ServerPathImg { get; set; }
     }
     public class Post
     {
