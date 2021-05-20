@@ -23,6 +23,23 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
+        public IActionResult ById([FromRoute] long id)
+        {
+            try
+            {
+                PostCore sMediaCore = new PostCore(dbContext);
+                LastPostsModel post = sMediaCore.ById(id);
+                if (post != null)
+                    return Ok(post);
+                return Ok("No existe el post!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpGet("{id}")]
         public IActionResult GetLastPosts([FromRoute] long id)
         {
             try

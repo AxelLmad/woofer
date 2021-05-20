@@ -37,13 +37,13 @@ namespace SMedia.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
-        [HttpPost]
-        public IActionResult GetReaction([FromBody] GetReaction reaction)
+        [HttpGet("{Type},{UserId},{PostId}")]
+        public IActionResult GetReaction([FromRoute] byte Type, long UserId, long PostId)
         {
             try
             {
                 ReactionCore sMediaCore = new ReactionCore(dbContext);
-                return Ok(sMediaCore.GetReaction(reaction));
+                return Ok(sMediaCore.GetReaction(Type, UserId, PostId));
             }
             catch(Exception ex)
             {

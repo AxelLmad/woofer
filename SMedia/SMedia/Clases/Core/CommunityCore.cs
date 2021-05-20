@@ -50,6 +50,39 @@ namespace SMedia.Clases.Core
             }
         }
 
+        public List<CommunityModel> GetRandomCommunity()
+        {
+            try
+            {
+                bool AnyCommunity = dbContext.Community.Any(x=>x.Active);
+                if (AnyCommunity) {
+                    List<CommunityModel> UserCommunities = (from C in dbContext.Community
+                                                      join U in dbContext.User on C.OwnerId equals U.Id
+                                                      orderby Guid.NewGuid()
+                                                      where (C.Active)
+                                                      select new CommunityModel ()
+                                                      {
+                                                         Id= C.Id,
+                                                         Name = C.Name,
+                                                         Color = C.Color,
+                                                         Description = C.Description,
+                                                         Picture = C.Picture,
+                                                         CreationDate = C.CreationDate,
+                                                         OwnerId = C.OwnerId,
+                                                         OwnerName = $"{U.Name} {U.LastName}",
+                                                         OwnerNickName = U.NickName,
+                                                         Active = C.Active
+                                                      }).Take(6).ToList();
+                    return UserCommunities;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public long Create(CreationCommunity cCommunity)
         {
 
