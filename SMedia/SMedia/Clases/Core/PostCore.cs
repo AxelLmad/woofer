@@ -15,6 +15,41 @@ namespace SMedia.Clases.Core
             this.dbContext = dbContext;
         }
 
+        public LastPostsModel ById(long id)
+        {
+            try
+            {
+                bool AnyCommunity = dbContext.Post.Any(x=> x.Active && x.Id == id);
+                if (AnyCommunity != null)
+                {
+                    LastPostsModel Comm = (from P in dbContext.Post
+                                           join U in dbContext.User on P.AuthorId equals U.Id
+                                           join C in dbContext.Community on P.CommunityId equals C.Id
+                                           where (P.Active && P.Id == id)
+                                           select new LastPostsModel()
+                                           {
+                                               Id = P.Id,
+                                               Content = P.Content,
+                                               CreationDate = P.CreationDate,
+                                               AuthorId = P.AuthorId,
+                                               Name = U.Name,
+                                               LastName = U.LastName,
+                                               NickName = U.NickName,
+                                               CommunityId = P.CommunityId,
+                                               CommunityName = C.Name,
+                                               Color = C.Color,
+                                               LastPostId = P.LastPostId,
+                                               Active = P.Active
+                                           }).FirstOrDefault();
+                    return Comm;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
         public List<LastPostsModel> GetLastPosts(long id)
         {
             try
