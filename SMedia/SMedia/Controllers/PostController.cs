@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SMedia.Clases.Core;
 using SMedia.Models;
+using SMedia.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,29 @@ namespace SMedia.Controllers
         }
 
         [HttpGet("{id}")]
+        public IActionResult ById([FromRoute] long id)
+        {
+            try
+            {
+                PostCore sMediaCore = new PostCore(dbContext);
+                LastPostsModel post = sMediaCore.ById(id);
+                if (post != null)
+                    return Ok(post);
+                return Ok("No existe el post!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpGet("{id}")]
         public IActionResult GetLastPosts([FromRoute] long id)
         {
             try
             {
                 PostCore sMediaCore = new PostCore(dbContext);
-                List<Post> lastposts = sMediaCore.GetLastPosts(id);
+                List<LastPostsModel> lastposts = sMediaCore.GetLastPosts(id);
                 if (lastposts != null)
                     return Ok(lastposts);
                 return Ok("No hay posts!");

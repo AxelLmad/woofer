@@ -32,7 +32,6 @@ namespace SMedia.Clases.Core
             }
 
         }
-
         public User ById(long id)
         {
             try
@@ -53,7 +52,27 @@ namespace SMedia.Clases.Core
             }
 
         }
-
+        public List<User> GetRandomUser()
+        {
+            try
+            {
+                bool AnyUser = dbContext.User.Any(x=> x.Active);
+                if (AnyUser)
+                {
+                   List<User> user = (  from s in dbContext.User
+                                        orderby Guid.NewGuid()
+                                        where s.Active
+                                        select s
+                                        ).Take(6).ToList();
+                    return user;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public FixedUser Edit(SignUpUser sUser)
         {
 
@@ -110,8 +129,6 @@ namespace SMedia.Clases.Core
             }
 
         }
-
-
         public FixedUser Login(LoginUser loginUser)
         {
             try
@@ -131,6 +148,20 @@ namespace SMedia.Clases.Core
                 return null;
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<User> SearchUser(string Nick)
+        {
+            try
+            {
+                List<User> Mathches = (from U in dbContext.User
+                                            where (U.NickName.Contains(Nick) && U.Active)
+                                            select U).ToList();
+                return Mathches;
+            }
+            catch(Exception ex)
             {
                 throw ex;
             }

@@ -35,6 +35,51 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult UserCreatedCommunity([FromRoute] long id)
+        {
+            try
+            {
+                CommunityCore core = new CommunityCore(dbContext);
+                List<Community> communities = core.UserCreatedCommunity(id);
+                if(communities != null)
+                    return Ok(core.UserCreatedCommunity(id));
+                return Ok("No hay comunidades");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetRandomCommunity()
+        {
+            try
+            {
+                CommunityCore core = new CommunityCore(dbContext);
+                return Ok(core.GetRandomCommunity());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpGet("{Name}")]
+        public IActionResult SearchCommunity([FromRoute] String Name)
+        {
+            try
+            {
+                CommunityCore communityCore = new CommunityCore(dbContext);
+                return Ok(communityCore.SearchCommunity(Name));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(CreationCommunity community)
         {

@@ -7,9 +7,9 @@ namespace SMedia.Models
 {
     public class PostPicture
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ServerPath { get; set; }
-        public int PostId { get; set; }
+        public long PostId { get; set; }
 
         public virtual Post Post { get; set; }
     }

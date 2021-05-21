@@ -25,6 +25,20 @@ namespace SMedia.Models
         public long OwnerId { get; set; }
 
     }
+
+    public class CommunityModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public string Description { get; set; }
+        public string? Picture { get; set; }
+        public DateTime CreationDate { get; set; }
+        public long OwnerId { get; set; }
+        public string OwnerName { get; set; }
+        public string OwnerNickName { get; set; }
+        public bool Active { get; set; }
+    }
     public class Community
     {
         public long Id { get; set; }
