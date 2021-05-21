@@ -12,34 +12,34 @@ class PostView extends React.Component{
     render() {
 
         return(
-            <section className={`border border-white flex flex-col-reverse md:flex-row-reverse justify-end bg-dark pt-8 
+            <section className={`border rounded border-white flex flex-col-reverse md:flex-row-reverse justify-end bg-dark pt-8 
             px-2 md:px-8  my-4  min-h-72 w-full sm:w-kilo lg:w-mega shadow-innerW text-white opacity-95`}>
 
                 <article className={"ml-4 flex flex-col h-full w-11/12"}>
 
                     <h4 className={"font-semibold bg-midnight text-gray-100 px-2 cursor-pointer pt-1.5 "}>{this.props.communityName}</h4>
 
-                    <span className={"mt-2 border p-2 shadow-innerW"}>{this.props.content}</span>
+                    <span className={"mt-2 border rounded p-2 shadow-innerW"}>{this.props.content}</span>
 
                     <p className={"self-end border border-opacity-50 border-l-0 border-r-0 mt-1 text-sm"}>{this.props.creationDate}</p>
 
                     <div className={"self-center mt-12 flex flex-row xl:mt-24 "}>
-                        <div className={"ml-6 rounded-full hover:bg-light cursor-pointer"}>
+                        <div className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
                             <button><img src={atIcon} alt="Responder"/></button>
                             <span className={"bold text-gray-800"}>{this.replies.length}</span>
                         </div>
 
-                        <div className={"ml-6 rounded-full hover:bg-light cursor-pointer"}>
+                        <div className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
                             <button><img src={likeIcon} alt="Reaction"/></button>
                             <span className={"bold text-gray-800"}>{this.replies.length}</span>
                         </div>
 
-                        <div className={"ml-6 rounded-full hover:bg-light cursor-pointer"}>
+                        <div className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
                             <button><img src={amazingIcon} alt="Amazing"/></button>
                             <span className={"bold text-gray-800"}>{this.replies.length}</span>
                         </div>
 
-                        <div className={"ml-6 rounded-full hover:bg-light cursor-pointer"}>
+                        <div className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
                             <button><img src={dislikeIcon} alt="Dislike"/></button>
                             <span className={"bold text-gray-800"}>{this.replies.length}</span>
                         </div>

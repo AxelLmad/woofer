@@ -1,14 +1,18 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Helmet} from 'react-helmet';
-import Login from "./login/login";
+import Login from "./pages/login/login";
 import Layout from "./layout/layout";
-import Home from "./home/home";
-import Signup from "./signup/signup";
+import Home from "./pages/home/home";
+import Signup from "./pages/signup/signup";
+import Profile from './pages/profile/profile';
 
 class App extends React.Component{
 
+    constructor(){
+        super();
 
+    }
 
     render(){
         return (
@@ -22,9 +26,11 @@ class App extends React.Component{
                     <Switch>
 
                         <Route exact path='/'>
+
                             <Layout>
                                 <Home/>
                             </Layout>
+
                         </Route>
 
                         <Route exact path='/login'>
@@ -41,7 +47,7 @@ class App extends React.Component{
 
                         <Route exact path='/test'>
                             <Layout>
-                                hh
+                                <Profile/>
                             </Layout>
                         </Route>
                     </Switch>

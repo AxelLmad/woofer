@@ -1,7 +1,8 @@
 import React from 'react';
-import logoIcon from '../../logo.svg';
-import { devRootURL, userApiURLs } from '../constants/api-url';
-import {ErrorLog } from '../ErrorLog/errorLog';
+import logoIcon from '../../../logo.svg';
+import { devRootURL, userApiURLs } from '../../constants/api-url';
+import {ErrorLog } from '../../ErrorLog/errorLog';
+import {lsUserKey} from "../../constants/keys";
 
 
 class Signup extends React.Component {
@@ -97,7 +98,7 @@ class Signup extends React.Component {
         })
             .then(response => response.json())
             .then((res)=>{
-                localStorage.setItem('woofer-user-ac', JSON.stringify({acc: this.state.nickname, id: res}));
+                localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: res}));
                 window.location.href ='http://localhost:3000/';
             })
             .catch(err => console.log(err));

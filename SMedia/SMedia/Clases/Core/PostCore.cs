@@ -19,8 +19,8 @@ namespace SMedia.Clases.Core
             try
             {
                 int typeFeed = TypeFeed(id);
-                bool anyUser = dbContext.Post.Any(user => user.Id == id && user.Active);
-                if (anyUser && typeFeed != -1)
+                bool anyUser = dbContext.User.Any(user => user.Id == id && user.Active);
+                if (anyUser)
                 {
                     switch (typeFeed)
                     {
@@ -145,7 +145,7 @@ namespace SMedia.Clases.Core
             try
             {
 
-                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId != null || post?.CommunityId != null)
+                if (string.IsNullOrEmpty(post.Content) || post?.AuthorId == null || post?.CommunityId == null)
                 {
                     return false;
                 }

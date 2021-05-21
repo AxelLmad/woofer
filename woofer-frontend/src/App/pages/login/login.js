@@ -1,7 +1,8 @@
 import React from 'react';
-import logoIcon from "../../logo.svg";
-import {ErrorLog} from "../ErrorLog/errorLog";
-import {devRootURL, userApiURLs} from "../constants/api-url";
+import logoIcon from "../../../logo.svg";
+import {ErrorLog} from "../../ErrorLog/errorLog";
+import {devRootURL, userApiURLs} from "../../constants/api-url";
+import {lsUserKey} from "../../constants/keys";
 
 class Login extends React.Component{
 
@@ -56,7 +57,7 @@ class Login extends React.Component{
         })
             .then(response => response.json())
             .then((json)=>{
-                localStorage.setItem('woofer-user-ac', JSON.stringify({acc: this.state.nickname, id: json.id}));
+                localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: json.id}));
                 window.location.href ='http://localhost:3000/';
             })
             .catch(err => console.log(err));
