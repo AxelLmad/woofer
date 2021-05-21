@@ -66,6 +66,20 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{Name}")]
+        public IActionResult SearchCommunity([FromRoute] String Name)
+        {
+            try
+            {
+                CommunityCore communityCore = new CommunityCore(dbContext);
+                return Ok(communityCore.SearchCommunity(Name));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(CreationCommunity community)
         {

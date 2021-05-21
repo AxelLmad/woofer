@@ -152,6 +152,20 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+        public List<User> SearchUser(string Nick)
+        {
+            try
+            {
+                List<User> Mathches = (from U in dbContext.User
+                                            where (U.NickName.Contains(Nick) && U.Active)
+                                            select U).ToList();
+                return Mathches;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public long SignUp(SignUpUser sUser)
         {

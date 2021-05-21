@@ -63,6 +63,20 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{Nick}")]
+        public IActionResult SearchUser([FromRoute] string Nick)
+        {
+            try
+            {
+                UserCore core = new UserCore(dbContext);
+                return Ok(core.SearchUser(Nick));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult Login(LoginUser user)
         {

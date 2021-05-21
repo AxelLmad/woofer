@@ -83,6 +83,21 @@ namespace SMedia.Clases.Core
             }
         }
 
+        public List<Community> SearchCommunity(String Name)
+        {
+            try
+            {
+                List<Community> Mathches = (from C in dbContext.Community
+                                            where (C.Name.Contains(Name) && C.Active)
+                                            select C).ToList();
+                return Mathches;
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         public long Create(CreationCommunity cCommunity)
         {
 
