@@ -3,21 +3,24 @@ import Publisher from "../../shared_components/publisher/publisher";
 import Feed from "../../shared_components/feed/feed";
 import AsideBar from "./aside-bar/aside-bar";
 import {lsUserKey} from "../../constants/keys";
+import SmallList from '../../shared_components/small-list/small-list';
+import {Modal} from "@material-ui/core";
 import {
     devRootURL,
     followedCommunityApiURLs,
     followedUserApiURLs,
-    postApiURLs,
     userApiURLs
 } from "../../constants/api-url";
-import {Post} from "../../../models/post";
+
 
 class Profile extends React.Component{
 
     state = {
         followers : [],
-        modalSelected: 0, // 0: none, 1: followers, 2: followed users, 3: communities, default: throw error
+        openModal: false,
+        selectedList: []
     };
+
 
     constructor(){
         super();
@@ -63,7 +66,7 @@ class Profile extends React.Component{
                                             communities: json
                                         });
 
-                                        console.log(this.state);
+
 
                                     })
                                     .catch(err => console.log(err));
@@ -76,6 +79,7 @@ class Profile extends React.Component{
 
             })
             .catch(err => console.log(err));
+
 
     }
 
@@ -114,6 +118,7 @@ class Profile extends React.Component{
                           followedUsers={this.state.followedUsers===undefined?[]:[...this.state.followedUsers]}
                           communities={this.state.communities===undefined?[]:[...this.state.communities]}
                     className={"hidden"}/>
+
             </div>
 );
 

@@ -69,7 +69,9 @@ namespace SMedia.Clases.Core
                         join C in dbContext.Community on FC.CommunityId equals C.Id
                         join U in dbContext.User on LP.AuthorId equals U.Id
                         where LP.Active
+                        
                         orderby LP.CreationDate
+                        
                         select new LastPostsModel()
                         {
                             Id = LP.Id,
@@ -109,7 +111,41 @@ namespace SMedia.Clases.Core
                             Active = LP.Active
                         }).Take(10).ToList();
                     List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
-                    return lp;
+
+                    List<long> insertedIds = new List<long>();
+
+                    List<LastPostsModel> finalList = new List<LastPostsModel>();
+
+                    foreach (LastPostsModel post in lp)
+                    {
+
+                        bool isInserted = false;
+
+                        foreach (long insertedId in insertedIds)
+                        {
+
+                            
+
+                            if(post.Id == insertedId)
+                            {
+
+                                isInserted = true;
+                                break;
+
+                            }
+
+                        }
+
+                        if (!isInserted)
+                        {
+                            insertedIds.Add(post.Id);
+                            finalList.Add(post);
+
+                        }
+
+                    }
+
+                    return finalList;
                 }
                 return null;
             }
