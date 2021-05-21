@@ -176,6 +176,40 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+        public List<LastPostsModel> GetResponsePost(long id)
+        {
+            try
+            {
+                List<LastPostsModel> lastposts = (from P in dbContext.Post
+                                                  where P.LastPostId == id
+                                                  join U in dbContext.User on P.AuthorId equals U.Id
+                                                  join C in dbContext.Community on P.CommunityId equals C.Id
+                                                  select new LastPostsModel { 
+                                                    Id = P.Id,
+                                                    Content = P.Content,
+                                                    CreationDate = P.CreationDate,
+                                                    AuthorId = P.AuthorId,
+                                                    Name = U.Name,
+                                                    LastName = U.LastName,
+                                                    NickName = U.NickName,
+                                                    CommunityId = P.CommunityId,
+                                                    CommunityName = C.Name,
+                                                    Color = C.Color,
+                                                    LastPostId = P.LastPostId,
+                                                    Active = P.Active,
+                                                    LastPostContent = P.LastPost.Content,
+                                                    LastPostAuthorName = P.LastPost.Author.Name,
+                                                    LastPostCommunityName = P.LastPost.Community.Name,
+                                                    LastPostCreationDate = P.LastPost.CreationDate,
+                                                    LastPostActive = P.LastPost.Active
+                                                  }).ToList();
+                return lastposts;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
         public bool CreatePost(CreationPost post)
         {
             try
