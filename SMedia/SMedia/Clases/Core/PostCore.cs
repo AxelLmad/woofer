@@ -39,7 +39,12 @@ namespace SMedia.Clases.Core
                                                CommunityName = C.Name,
                                                Color = C.Color,
                                                LastPostId = P.LastPostId,
-                                               Active = P.Active
+                                               Active = P.Active,
+                                               LastPostContent = P.LastPost.Content,
+                                               LastPostAuthorName = P.LastPost.Author.Name,
+                                               LastPostCommunityName = P.LastPost.Community.Name,
+                                               LastPostCreationDate = P.LastPost.CreationDate,
+                                               LastPostActive = P.LastPost.Active
                                            }).FirstOrDefault();
                     return Comm;
                 }
@@ -84,7 +89,12 @@ namespace SMedia.Clases.Core
                             CommunityName = C.Name,
                             Color = C.Color,
                             LastPostId = LP.LastPostId,
-                            Active = LP.Active
+                            Active = LP.Active,
+                            LastPostContent = LP.LastPost.Content,
+                            LastPostAuthorName = LP.LastPost.Author.Name,
+                            LastPostCommunityName = LP.LastPost.Community.Name,
+                            LastPostCreationDate = LP.LastPost.CreationDate,
+                            LastPostActive = LP.LastPost.Active
                         }
                         ).Take(20).ToList();
                     List<LastPostsModel> UserPosts = (
@@ -107,7 +117,12 @@ namespace SMedia.Clases.Core
                             CommunityName = C.Name,
                             Color = C.Color,
                             LastPostId = LP.LastPostId,
-                            Active = LP.Active
+                            Active = LP.Active,
+                            LastPostContent = LP.LastPost.Content,
+                            LastPostAuthorName = LP.LastPost.Author.Name,
+                            LastPostCommunityName = LP.LastPost.Community.Name,
+                            LastPostCreationDate = LP.LastPost.CreationDate,
+                            LastPostActive = LP.LastPost.Active
                         }).Take(10).ToList();
                     List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
                     return lp;
@@ -143,7 +158,12 @@ namespace SMedia.Clases.Core
                                                           CommunityName = C.Name,
                                                           Color = C.Color,
                                                           LastPostId = P.LastPostId,
-                                                          Active = P.Active
+                                                          Active = P.Active,
+                                                          LastPostContent = P.LastPost.Content,
+                                                          LastPostAuthorName = P.LastPost.Author.Name,
+                                                          LastPostCommunityName = P.LastPost.Community.Name,
+                                                          LastPostCreationDate = P.LastPost.CreationDate,
+                                                          LastPostActive = P.LastPost.Active
                                                       }).ToList();
                     if (LastPosts != null)
                         return LastPosts;
