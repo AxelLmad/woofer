@@ -154,6 +154,43 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+        public List<LastPostsModel> GetPostUser(long id)
+        {
+            try
+            {
+                bool AnyUser = dbContext.User.Any(x=> x.Id == id && x.Active);
+                if (AnyUser) 
+                {
+                    List<LastPostsModel> LastPosts = (from P in dbContext.Post
+                                                      join U in dbContext.User on P.AuthorId equals U.Id
+                                                      join C in dbContext.Community on P.CommunityId equals C.Id
+                                                      where (P.AuthorId == id && P.Active)
+                                                      select new LastPostsModel()
+                                                      {
+                                                          Id = P.Id,
+                                                          Content = P.Content,
+                                                          CreationDate = P.CreationDate,
+                                                          AuthorId = P.AuthorId,
+                                                          Name = U.Name,
+                                                          LastName = U.LastName,
+                                                          NickName = U.NickName,
+                                                          CommunityId = C.Id,
+                                                          CommunityName = C.Name,
+                                                          Color = C.Color,
+                                                          LastPostId = P.LastPostId,
+                                                          Active = P.Active
+                                                      }).ToList();
+                    if (LastPosts != null)
+                        return LastPosts;
+                    return null;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public bool CreatePost(CreationPost post)
         {
             try
