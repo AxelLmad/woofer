@@ -51,26 +51,31 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public ReactionType GetReaction(byte Type, long UserId, long PostId)
+        public ReactionType GetReaction(long PostId)
         {
             try
             {
                 bool anyPost = dbContext.Post.Any(p => p.Id == PostId);
-                bool anyUser = dbContext.User.Any(u => u.Id == UserId && u.Active);
-                if (anyPost && anyUser && Type >= 0 && Type <= 3) 
+                if (anyPost) 
                 {
-                    ReactionType reactionType = new();
-                    var items = (from R in dbContext.Reaction
-                                 where (R.PostId == PostId && R.Type == Type)
-                                 select R);
-                    int count = items.Count();
-                    reactionType.Amount = count;
-                    reactionType.CurrentUser = false;
-                    reactionType.Type = Type;
-                    bool anyReactionType = dbContext.Reaction.Any(r => r.UserId == UserId);
-                    if (anyReactionType)
-                        reactionType.CurrentUser = true;
-                    return reactionType;
+                    var reactionType1 = (from R in dbContext.Reaction
+                                                 where (R.PostId == PostId && R.Type == 1)
+                                                 select R);
+                    var reactionType2 = (from R in dbContext.Reaction
+                                         where (R.PostId == PostId && R.Type == 2)
+                                         select R);
+                    var reactionType3 = (from R in dbContext.Reaction
+                                         where (R.PostId == PostId && R.Type == 3)
+                                         select R);
+                    int count1 = reactionType1.Count();
+                    int count2 = reactionType2.Count();
+                    int count3 = reactionType3.Count();
+                    ReactionType Reaction = new ReactionType();
+                    Reaction.Type1 = count1;
+                    Reaction.Type2 = count2;
+                    Reaction.Type3 = count3;
+                    Reaction.IdPost = PostId;
+                    return Reaction;
                 }
                 return null;
             }
