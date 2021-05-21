@@ -56,6 +56,23 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetPostUser([FromRoute] long id)
+        {
+            try
+            {
+                PostCore sMediaCore = new PostCore(dbContext);
+                List<LastPostsModel> lastPosts = sMediaCore.GetPostUser(id);
+                if(lastPosts != null)
+                    return Ok(lastPosts);
+                return Ok("No hay posts!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult CreatePost([FromBody] CreationPost post)
         {
