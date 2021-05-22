@@ -125,6 +125,7 @@ namespace SMedia.Clases.Core
                             LastPostActive = LP.LastPost.Active
                         }).Take(10).ToList();
                     List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
+                    SetViews(lp, id);
                     return lp;
                 }
                 return null;
@@ -166,7 +167,10 @@ namespace SMedia.Clases.Core
                                                           LastPostActive = P.LastPost.Active
                                                       }).ToList();
                     if (LastPosts != null)
+                    {
+                        SetViews(LastPosts, id);
                         return LastPosts;
+                    }
                     return null;
                 }
                 return null;
@@ -286,6 +290,29 @@ namespace SMedia.Clases.Core
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public void SetViews(List<LastPostsModel> posts, long id)
+        {
+            try
+            {
+                foreach(LastPostsModel LP in posts)
+                {
+                    bool AnyView = dbContext.Viewed.Any(x => x.UserId == id && x.PostId == LP.Id);
+                    if (AnyView)
+                    {
+                        Viewed viewed = new();
+                        viewed.PostId = LP.Id;
+                        viewed.UserId = LP.AuthorId;
+                        dbContext.Add(viewed);
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
             }
         }
     }
