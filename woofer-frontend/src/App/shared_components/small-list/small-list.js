@@ -1,5 +1,7 @@
 import React from 'react';
 import backIcon from "../../../img/icon/arrow-left.svg";
+import SmallListCard from "./small-list-card";
+import {User} from '../../../models/user';
 
 
 class SmallList extends React.Component{
@@ -38,6 +40,16 @@ class SmallList extends React.Component{
 
     }
 
+    renderCards() {
+        let key = 0;
+        return this.props.list.map((el) => {
+
+            return (<li key={key++}><SmallListCard id={el.id} name={el.name}
+                                   type={(el instanceof User)?'user':'community'}/></li>);
+
+    });
+    }
+
     render(){
 
         return <div>
@@ -50,19 +62,7 @@ class SmallList extends React.Component{
 
                 <div className={"flex flex-col"}>
                     <ul>
-                        <li>
-                            {this.props.list.map((el) => {
-
-                                return (<article className={"flex flex-col items-center bg-dark w-full"}>
-                                    <h5>{el.name}</h5>
-                                    <figure><img className={"w-1/3 mx-auto"} src={el.picture} alt={el.type}/></figure>
-                                    <button onClick={this.handleSeguirButton}
-                                            className={"rounded-full w-2/3 h-6 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary"}>
-                                        Seguir
-                                    </button>
-                                </article>)
-                            })}
-                        </li>
+                        {this.renderCards()}
                     </ul>
                 </div>
 

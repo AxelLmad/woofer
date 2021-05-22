@@ -59,7 +59,7 @@ class Sidebar extends React.Component{
                         <span>Comunidades</span> <img className={"w-6 ml-4"} src={userGroupIcon} alt="comunidades"/>
                     </Link>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/"}>
+                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/configuration"}>
                         <span>Configuración</span> <img className={"w-6 ml-4"} src={configIcon} alt="configuracion"/>
                     </Link>
 

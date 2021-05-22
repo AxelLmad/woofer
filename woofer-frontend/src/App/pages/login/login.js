@@ -2,7 +2,7 @@ import React from 'react';
 import logoIcon from "../../../logo.svg";
 import {ErrorLog} from "../../ErrorLog/errorLog";
 import {devRootURL, userApiURLs} from "../../constants/api-url";
-import {lsUserKey} from "../../constants/keys";
+import {currentIP, lsUserKey} from "../../constants/keys";
 
 class Login extends React.Component{
 
@@ -58,7 +58,7 @@ class Login extends React.Component{
             .then(response => response.json())
             .then((json)=>{
                 localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: json.id}));
-                window.location.href ='http://localhost:3000/';
+                window.location.href =`http://${currentIP}/`;
             })
             .catch(err => console.log(err));
 
@@ -86,17 +86,17 @@ class Login extends React.Component{
 
                 <div className={" py-5 mx-auto"}>
                     <div className={"flex flex-col items-center w-2/5 mx-auto"}>
-                        <a href="http://localhost:3000/register" className={"text-white underline self-end mr-5"}>Registrarse</a>
+                        <a href={`http://${currentIP}/register`} className={"text-white underline self-end mr-5"}>Registrarse</a>
                         <div className={"flex flex-col mb-2"}>
                             <label className={"text-white"} htmlFor="nickname">Nickname</label>
                             <input onChange={this.handleNicknameChange}
-                                   className={"h-7 px-5 py-2 rounded"} type="text" id={"nickname"}/>
+                                   className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="text" id={"nickname"}/>
                         </div>
 
                         <div className={"flex flex-col mb-2"}>
                             <label className={"text-white"} htmlFor="password">Contraseña</label>
                             <input onChange={this.handlePasswordChange}
-                                   className={"h-7 px-5 py-2 rounded"} type="password" id={"password"}/>
+                                   className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="password" id={"password"}/>
                         </div>
 
                         <button onClick={this.submit}

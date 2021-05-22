@@ -32,7 +32,11 @@ namespace SMedia
             services.AddControllers();
             services.AddCors(options => { 
                 
-                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().WithHeaders("content-type"));
+                options.AddDefaultPolicy(builder => {
+                    builder.AllowAnyOrigin().WithHeaders("content-type");
+                    builder.AllowAnyMethod();
+                    });
+               
             
             });
             services.AddSwaggerGen(c =>

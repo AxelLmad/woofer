@@ -18,6 +18,7 @@ class Feed extends React.Component{
                         communityId={post.community.id}
                         content={post.content}
                         creationDate={post.creationDate}
+                        userId={post.author.id}
                         userName={post.author.name}
                         userNickname={post.author.nickname}/>
                 </li>

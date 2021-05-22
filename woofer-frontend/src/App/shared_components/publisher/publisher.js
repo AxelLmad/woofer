@@ -9,7 +9,7 @@ import {
     userApiURLs,
     userPictureApiURLs
 } from "../../constants/api-url";
-import {lsUserKey} from "../../constants/keys";
+import {currentIP, lsUserKey} from "../../constants/keys";
 import {Community} from "../../../models/community";
 import firebase from 'firebase';
 import {randomString} from "../randomString";
@@ -79,6 +79,34 @@ class Publisher extends React.Component{
                 this.setState({name: json.name})
             })
             .catch(err => console.log(err));
+
+        let nullPicture = false;
+
+        const acc = JSON.parse(localStorage.getItem(lsUserKey));
+
+        fetch(`${devRootURL}${userPictureApiURLs.byUserId(acc.id)}`,{
+            method: 'GET'
+        })
+            .then(response => response.status===200?response.json():nullPicture = true)
+            .then((json)=>{
+                if(!nullPicture){
+
+                    const storageRef = firebase.storage().ref();
+                    const starsRef = storageRef.child(json.serverPath);
+
+                    starsRef.getDownloadURL().then((url) => {
+                        this.setState({picture: url});
+                    }).catch(function(error) {
+
+                        switch (error.code) {
+                            case 'storage/object-not-found':
+                                console.log('Object does not exist');
+                                break;
+                        }
+                    });
+                }
+            })
+            .catch(err => console.log(err));
     }
 
     handleContentChange($e) {
@@ -101,7 +129,7 @@ class Publisher extends React.Component{
 
         if (acc === null || acc === undefined){
 
-            window.location.href = 'http://localhost:3000/register';
+            window.location.href = `http://${currentIP}/register`;
             return;
 
         }
@@ -197,7 +225,7 @@ class Publisher extends React.Component{
             <div className={"flex flex-row border-lg mt-12 h-full md:ml-8 xl:ml-48"}>
                 <figure className={"ml-4 mr-4 mt-2"}>
                     <img className={"rounded-full w-12"}
-                         src="https://scontent.fmty1-1.fna.fbcdn.net/v/t1.6435-9/46051495_10213185968027882_5149631763173081088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=BzpWfsQmnTMAX9u6jcp&_nc_ht=scontent.fmty1-1.fna&oh=7957e60b699260398f3e310dcb99f272&oe=608DED45" alt="personaje"/>
+                         src={this.state.picture} alt="personaje"/>
                 </figure>
                 <textarea onChange={this.handleContentChange}
                     className={"w-3/4 h-auto bg-gray-900 py-4 px-2 resize-none"}/>

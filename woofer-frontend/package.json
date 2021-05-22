@@ -1,6 +1,7 @@
 {
   "name": "woofer-frontend",
   "version": "0.1.0",
+  "homepage": "http://13.65.171.118/woofer/",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",

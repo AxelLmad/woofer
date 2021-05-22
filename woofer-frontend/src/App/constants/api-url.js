@@ -6,6 +6,7 @@ export const userApiURLs = {
     getById: (id) => {return `/api/User/ById/${id}`},
     signUp: '/api/User/SignUp',
     login: '/api/User/Login',
+    edit: '/api/User/Edit'
 
 };
 

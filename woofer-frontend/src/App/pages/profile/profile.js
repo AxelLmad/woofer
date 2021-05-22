@@ -7,9 +7,10 @@ import {
     devRootURL,
     followedCommunityApiURLs,
     followedUserApiURLs, postApiURLs,
-    userApiURLs
+    userApiURLs, userPictureApiURLs
 } from "../../constants/api-url";
 import {Post} from "../../../models/post";
+import firebase from "firebase";
 
 
 class Profile extends React.Component{
@@ -18,7 +19,8 @@ class Profile extends React.Component{
         followers : [],
         openModal: false,
         selectedList: [],
-        posts: []
+        posts: [],
+        picture: ''
     };
 
 
@@ -27,7 +29,6 @@ class Profile extends React.Component{
 
         const userId = JSON.parse(localStorage.getItem(lsUserKey)).id;
 
-        // nested HTTP calls: 1.user info 2.user followers 3.user followed users 4.user followed communities
         fetch(`${devRootURL}${userApiURLs.getById(userId)}`,{
             method: 'GET'
         })
@@ -35,10 +36,10 @@ class Profile extends React.Component{
             .then((json)=>{
                 this.setState({
                     nickname: json.nickName,
-                    picture: json.picture,
                     name: json.name,
                     lastName: json.lastName
                 });
+
 
                 fetch(`${devRootURL}${followedUserApiURLs.getFollowers(userId)}`,{
                     method: 'GET'
@@ -104,6 +105,48 @@ class Profile extends React.Component{
                 });
 
 
+            })
+            .catch(err => console.log(err));
+
+        fetch(`${devRootURL}${userPictureApiURLs.byUserId(userId)}`,{
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then((json)=>{
+
+                this.setState({
+                    picture: json.serverPath
+                });
+
+
+            })
+            .catch(err => console.log(err));
+
+        let nullPicture = false;
+
+        const acc = JSON.parse(localStorage.getItem(lsUserKey));
+
+        fetch(`${devRootURL}${userPictureApiURLs.byUserId(acc.id)}`,{
+            method: 'GET'
+        })
+            .then(response => response.status===200?response.json():nullPicture = true)
+            .then((json)=>{
+                if(!nullPicture){
+
+                    const storageRef = firebase.storage().ref();
+                    const starsRef = storageRef.child(json.serverPath);
+
+                    starsRef.getDownloadURL().then((url) => {
+                        this.setState({picture: url});
+                    }).catch(function(error) {
+
+                        switch (error.code) {
+                            case 'storage/object-not-found':
+                                console.log('Object does not exist');
+                                break;
+                        }
+                    });
+                }
             })
             .catch(err => console.log(err));
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import backIcon from "../../../img/icon/arrow-left.svg";
 import {devRootURL, postApiURLs} from "../../constants/api-url";
-import {lsUserKey} from "../../constants/keys";
+import {currentIP, lsUserKey} from "../../constants/keys";
 
 class CommentBox extends React.Component{
 
@@ -28,7 +28,7 @@ class CommentBox extends React.Component{
 
         if (acc === null || acc === undefined){
 
-            window.location.href = 'http://localhost:3000/register';
+            window.location.href = `http://${currentIP}/register`;
             return;
 
         }

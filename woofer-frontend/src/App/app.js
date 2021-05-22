@@ -6,6 +6,7 @@ import Layout from "./layout/layout";
 import Home from "./pages/home/home";
 import Signup from "./pages/signup/signup";
 import Profile from './pages/profile/profile';
+import Configuration from "./pages/configuration/configuration";
 
 class App extends React.Component{
 
@@ -51,9 +52,9 @@ class App extends React.Component{
                             </Layout>
                         </Route>
 
-                        <Route exact path='/test'>
+                        <Route exact path='/configuration'>
                             <Layout>
-                                <Profile/>
+                                <Configuration/>
                             </Layout>
                         </Route>
                     </Switch>

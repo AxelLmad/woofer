@@ -3,7 +3,13 @@ import atIcon from '../../../img/icon/at-symbol.svg';
 import likeIcon from '../../../img/icon/heart.svg';
 import dislikeIcon from '../../../img/icon/thumb-down.svg';
 import amazingIcon from '../../../img/icon/lightning-bolt.svg';
-import {devRootURL, postApiURLs, postPictureApiURLs, reactionApiURLs} from "../../constants/api-url";
+import {
+    devRootURL,
+    postApiURLs,
+    postPictureApiURLs,
+    reactionApiURLs,
+    userPictureApiURLs
+} from "../../constants/api-url";
 import firebase from "firebase";
 import {Modal} from "@material-ui/core";
 import CommentBox from "../commentBox/commentBox";
@@ -26,7 +32,8 @@ class PostView extends React.Component{
         thunderReactions: 0,
         thumbDownReactions: 0,
         anchorEl: null,
-        replies: []
+        replies: [],
+        userPicture: null
 
     }
 
@@ -38,12 +45,12 @@ class PostView extends React.Component{
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
-        let nullPicture = false;
+
 
         fetch(`${devRootURL}${postApiURLs.getReplies(this.props.id)}`,{
             method: 'GET'
         })
-            .then(response => response.status===200?response.json():nullPicture = true)
+            .then(response => response.json())
             .then((json)=>{
 
                 const auxPosts = json.map((element) => {
@@ -64,7 +71,7 @@ class PostView extends React.Component{
         fetch(`${devRootURL}${reactionApiURLs.byId(this.props.id)}`,{
             method: 'GET'
         })
-            .then(response => response.status===200?response.json():nullPicture = true)
+            .then(response => response.json())
             .then((json)=>{
                 this.setState({
                     heartReactions: json.type1,
@@ -74,6 +81,7 @@ class PostView extends React.Component{
             })
             .catch(err => console.log(err));
 
+        let nullPicture = false;
         fetch(`${devRootURL}${postPictureApiURLs.byPostId(this.props.id)}`,{
             method: 'GET'
         })
@@ -86,6 +94,32 @@ class PostView extends React.Component{
 
                     starsRef.getDownloadURL().then((url) => {
                         this.setState({picture: url});
+                    }).catch(function(error) {
+
+                        switch (error.code) {
+                            case 'storage/object-not-found':
+                                console.log('Object does not exist');
+                                break;
+                        }
+                    });
+                }
+            })
+            .catch(err => console.log(err));
+
+        nullPicture = false;
+
+        fetch(`${devRootURL}${userPictureApiURLs.byUserId(this.props.userId)}`,{
+            method: 'GET'
+        })
+            .then(response => response.status===200?response.json():nullPicture = true)
+            .then((json)=>{
+                if(!nullPicture){
+
+                    const storageRef = firebase.storage().ref();
+                    const starsRef = storageRef.child(json.serverPath);
+
+                    starsRef.getDownloadURL().then((url) => {
+                        this.setState({userPicture: url});
                     }).catch(function(error) {
 
                         switch (error.code) {
@@ -240,7 +274,7 @@ class PostView extends React.Component{
 
                 <aside className={"mr-4 mx-auto"}>
                     <figure className={"w-32 md:shadow-innerW bg-gray-900 md:h-48 md:px-4 md:pt-6 rounded"}>
-                        <img className={"rounded-full md:shadow-white"} src="https://images.unsplash.com/photo-1506956191951-7a88da4435e5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80" alt="avatar"/>
+                        <img className={"rounded-full md:shadow-white"} src={this.state.userPicture} alt="avatar"/>
                         <figcaption className={"md:mt-4 mx-auto text-center w-100"}>{this.props.userName}</figcaption>
                         <p className={"text-xs text-center mb-2 md:mb-0 md:mt-2 underline cursor-pointer"}>@{this.props.userNickname}</p>
                     </figure>

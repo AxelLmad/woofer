@@ -10,3 +10,6 @@ export const firebaseConfig = {
     appId: "1:276246077479:web:ee07ddce93464f1d75ae02",
     measurementId: "G-Q1B7VWK2E0"
 };
+
+export const currentIP = 'localhost:3000';
+
