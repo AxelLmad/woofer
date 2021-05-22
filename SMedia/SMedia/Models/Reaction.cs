@@ -23,8 +23,9 @@ namespace SMedia.Models
     }
     public class ReactionType
     {
-        public byte Type { get; set; }
-        public bool CurrentUser { get; set; }
-        public long Amount { get; set; }
+        public int Type1 { get; set; }
+        public int Type2 { get; set; }
+        public int Type3 { get; set; }
+        public long IdPost { get; set; }
     }
 }

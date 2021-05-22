@@ -11,9 +11,9 @@ namespace SMedia.Models
         public DbSet<Community> Community { get; set; }
         public DbSet<FavoritePost> FavoritePost { get; set; }
         public DbSet<FollowedCommunity> FollowedCommunity { get; set; }
-        public DbSet<Message> Message { get; set; }
         public DbSet<Post> Post { get; set; }
         public DbSet<PostPicture> PostPicture { get; set; }
+        public DbSet<UserPicture> UserPicture { get; set; }
         public DbSet<Reaction> Reaction { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<FollowedUser> FollowedUser { get; set; }
@@ -122,38 +122,6 @@ namespace SMedia.Models
 
             });
 
-            modelBuilder.Entity<Message>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Id)
-                    .HasColumnType("bigint")
-                    .IsRequired();
-
-                entity.Property(e => e.Content)
-                    .IsUnicode(false)
-                    .IsRequired();
-
-                entity.Property(e => e.SenderId)
-                    .HasMaxLength(255)
-                    .IsRequired();
-
-                entity.Property(e => e.ReceiverId)
-                    .IsRequired();
-
-                entity.Property(e => e.Date)
-                    .HasColumnType("datetime")
-                    .IsRequired();
-
-                entity.HasOne(e => e.Sender)
-                    .WithMany(y => y.Sender)
-                    .HasConstraintName("FK__Message__SenderI__398D8EEE");
-
-                entity.HasOne(e => e.Receiver)
-                    .WithMany(y => y.Receiver)
-                    .HasConstraintName("FK__Message__Receive__3A81B327");
-            });
-
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -216,6 +184,30 @@ namespace SMedia.Models
                     .HasConstraintName("FK__PostPictu__PostI__31EC6D26");
             });
 
+            modelBuilder.Entity<UserPicture>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("bigint")
+                    .IsRequired();
+
+                entity.Property(e => e.ServerPath)
+                    .HasMaxLength(255)
+                    .IsRequired();
+
+                entity.Property(e => e.UserId)
+                    .IsRequired();
+
+                entity.Property(e => e.Active)
+                    .HasColumnType("bit")
+                    .IsRequired();
+
+                entity.HasOne(e => e.User)
+                    .WithMany(y => y.UserPicture)
+                    .HasConstraintName("FK__UserPictu__UserI__5CD6CB2B");
+            });
+
             modelBuilder.Entity<Reaction>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -276,11 +268,6 @@ namespace SMedia.Models
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .IsRequired();
-
-                entity.Property(e => e.Picture)
-                    .HasMaxLength(255)
-                    .IsUnicode()
-                    .IsRequired(false);
 
                 entity.Property(e => e.RegisterDate)
                     .HasColumnType("datetime")

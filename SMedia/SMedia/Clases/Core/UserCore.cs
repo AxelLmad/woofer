@@ -84,17 +84,45 @@ namespace SMedia.Clases.Core
                         && s.Active == true
                         select s
                         ).FirstOrDefault();
+                UserPicture pic = (from s in dbContext.UserPicture
+                                   where (s.UserId == user.Id && s.ServerPath == sUser.ServerPath)
+                                   select s).FirstOrDefault();
                 if (user != null) {
                     user.NickName = sUser.NickName;
                     user.Password = sUser.Password;
                     user.Email = sUser.Email;
                     user.Name = sUser.Name;
                     user.LastName = sUser.LastName;
-                    user.Picture = sUser.Picture;
-
                     dbContext.SaveChanges();
+                    if (pic == null)
+                    {
+                        pic = new UserPicture();
+                        pic.ServerPath = sUser.ServerPath;
+                        pic.Active = true;
+                        pic.UserId = user.Id;
+                        dbContext.Add(pic);
+                        List<UserPicture> pictures = (from s in dbContext.UserPicture
+                                                      where s.UserId == user.Id
+                                                      select s).ToList();
+                        foreach (UserPicture up in pictures)
+                        {
+                            up.Active = false;
+                        }
+                        dbContext.SaveChanges();
+                    }
+                    else{
+                        List<UserPicture> pictures = (from s in dbContext.UserPicture
+                                                where s.UserId == user.Id
+                                                select s).ToList();
+                        foreach (UserPicture up in pictures)
+                        {
+                            up.Active = false;
+                        }
+                        pic.Active = true;
+                        dbContext.SaveChanges();
+                    }
 
-                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, user.Picture, user.RegisterDate, user.LastLogin);
+                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, pic.ServerPath, user.RegisterDate, user.LastLogin);
                 }
                 return null;
             }
@@ -115,11 +143,19 @@ namespace SMedia.Clases.Core
                    && s.Active == true
                    select s
                    ).FirstOrDefault();
+                UserPicture pic = (from s in dbContext.UserPicture
+                                   where (s.UserId == user.Id && s.Active)
+                                   select s).FirstOrDefault();
+                if (pic == null)
+                {
+                    pic = new UserPicture();
+                    pic.ServerPath = null;
+                }
                 if (user != null) {
                     user.Active = false;
                     dbContext.Update(user);
                     dbContext.SaveChanges();
-                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, user.Picture, user.RegisterDate, user.LastLogin);
+                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, pic.ServerPath ,user.RegisterDate, user.LastLogin);
                 }
                 return null;
             }
@@ -140,9 +176,17 @@ namespace SMedia.Clases.Core
                          && s.Active == true
                          select s
                          ).FirstOrDefault();
+                UserPicture pic = (from s in dbContext.UserPicture
+                                   where (s.UserId == user.Id && s.Active)
+                                   select s).FirstOrDefault();
+                if (pic == null)
+                {
+                    pic = new UserPicture();
+                    pic.ServerPath = null;
+                }
                 if (user != null)
                 {
-                    FixedUser fUser = new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, user.Picture, user.RegisterDate, user.LastLogin);
+                    FixedUser fUser = new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, pic.ServerPath , user.RegisterDate, user.LastLogin);
                     return fUser;
                 }
                 return null;
@@ -180,7 +224,6 @@ namespace SMedia.Clases.Core
                     user.Email = sUser.Email;
                     user.Name = sUser.Name;
                     user.LastName = sUser.LastName;
-                    user.Picture = sUser.Picture;
                     user.RegisterDate = DateTime.Now;
                     user.LastLogin = DateTime.Now;
                     user.Active = true;

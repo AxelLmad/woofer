@@ -73,6 +73,20 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetResponsePost([FromRoute] long id)
+        {
+            try
+            {
+                PostCore postCore = new PostCore(dbContext);
+                return Ok(postCore.GetResponsePost(id));
+            }
+            catch(Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult CreatePost([FromBody] CreationPost post)
         {
