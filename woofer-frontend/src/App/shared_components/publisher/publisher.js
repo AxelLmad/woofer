@@ -2,7 +2,13 @@ import React from 'react';
 import {Modal} from "@material-ui/core";
 import backIcon from '../../../img/icon/arrow-left.svg';
 import picIcon from '../../../img/icon/photograph.svg';
-import {devRootURL, followedCommunityApiURLs, postApiURLs, userApiURLs} from "../../constants/api-url";
+import {
+    devRootURL,
+    followedCommunityApiURLs,
+    postApiURLs,
+    userApiURLs,
+    userPictureApiURLs
+} from "../../constants/api-url";
 import {lsUserKey} from "../../constants/keys";
 import {Community} from "../../../models/community";
 import firebase from 'firebase';
@@ -13,7 +19,8 @@ class Publisher extends React.Component{
     state = {
         openModal: false,
         communities: [],
-        pictureFile: null
+        pictureFile: null,
+        picture: ''
     }
 
     constructor(props) {
@@ -29,6 +36,17 @@ class Publisher extends React.Component{
 
 
         const userId = JSON.parse(localStorage.getItem(lsUserKey)).id;
+
+        fetch(`${devRootURL}${userPictureApiURLs.byUserId(userId)}`,{
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then((json) => {
+                this.setState({ picture: json.serverPath });
+                console.log(this.state.picture);
+
+            })
+            .catch(err => console.log(err));
 
         fetch(`${devRootURL}${followedCommunityApiURLs.getByFollower(userId)}`,{
             method: 'GET'
@@ -58,7 +76,7 @@ class Publisher extends React.Component{
             .then(response => response.json())
             .then((json)=>{
 
-                this.setState({picture: json.picture, name: json.name})
+                this.setState({name: json.name})
             })
             .catch(err => console.log(err));
     }

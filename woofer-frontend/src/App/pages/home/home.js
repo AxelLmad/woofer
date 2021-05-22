@@ -34,11 +34,14 @@ class Home extends React.Component{
                 const auxPosts = json.map((element) => {
 
                     return new Post(element.id,
-                        element.content, element.creationDate, {name: 'Jane Doe', nickname: 'janedoe'}, {name: 'Naruto'});
+                        element.content,
+                        element.creationDate,
+                        {id: element.authorId, name: element.name, nickname: element.nickName},
+                        {name: element.communityName, id: element.communityId});
 
                 });
 
-                this.setState({posts: [...auxPosts]})
+                this.setState({posts: [...auxPosts]});
             })
             .catch(err => console.log(err));
     }

@@ -13,7 +13,8 @@ export const postApiURLs = {
 
     create: '/api/Post/CreatePost',
     getLastPosts: (id) => {return `/api/Post/GetLastPosts/${id}`},
-    getUserPosts: (id) => {return `/api/Post/GetPostUser/${id}`}
+    getUserPosts: (id) => {return `/api/Post/GetPostUser/${id}`},
+    getReplies: (id) => {return `/api/Post/GetResponsePost/${id}`}
 
 };
 
@@ -33,5 +34,18 @@ export const followedUserApiURLs = {
 export const postPictureApiURLs = {
 
     byPostId: (id) => {return `/api/PostPicture/ByPostId/${id}`}
+
+}
+
+export const userPictureApiURLs = {
+
+    byUserId: (id) => {return `/api/UserPicture/GetCurrentPicture/${id}`}
+
+}
+
+export const reactionApiURLs = {
+
+    set: '/api/Reaction/SetReactPost',
+    byId: (id) => {return `/api/Reaction/GetReaction/${id}`}
 
 }

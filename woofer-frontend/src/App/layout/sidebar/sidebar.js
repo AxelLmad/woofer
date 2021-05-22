@@ -2,7 +2,7 @@ import React from 'react';
 import menuIcon from '../../../img/icon/menu.svg';
 import { Link } from "react-router-dom";
 import logoIcon from '../../../logo.svg';
-import notifIcon from '../../../img/icon/notif.svg';
+import userIcon from '../../../img/icon/user.svg';
 import fireIcon from '../../../img/icon/fire.svg';
 import userGroupIcon from '../../../img/icon/user-group.svg';
 import configIcon from '../../../img/icon/cog.svg';
@@ -47,8 +47,8 @@ class Sidebar extends React.Component{
                         <span>Inicio</span> <img className={"w-6 ml-4"} src={logoIcon} alt="woofer"/>
                     </Link>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/test"}>
-                        <span>Notificaciones</span> <img className={"w-6 ml-4"} src={notifIcon} alt="notificaciones"/>
+                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/profile"}>
+                        <span>Perfil</span> <img className={"w-6 ml-4"} src={userIcon} alt="perfil"/>
                     </Link>
 
                     <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/"}>

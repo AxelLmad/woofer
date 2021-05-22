@@ -13,7 +13,7 @@ namespace SMedia.Clases.Core
         {
             this.dbContext = dbContext;
         }
-        public bool SetReactPost(Reaction reaction)
+        public bool SetReactPost(GetReaction reaction)
         {
             try
             {
@@ -21,8 +21,9 @@ namespace SMedia.Clases.Core
                 bool AnyPost = dbContext.Post.Any(post => post.Id == reaction.PostId);
                 if (AnyUser && AnyPost)
                 {
-                    Reaction AnyReaction = dbContext.Reaction.FirstOrDefault(reaction => reaction.PostId == reaction.PostId
-                                            && reaction.UserId == reaction.UserId);
+                    Reaction AnyReaction = dbContext.Reaction.FirstOrDefault(reactionn => reactionn.PostId == reaction.PostId
+                                            && reactionn.UserId == reaction.UserId);
+
                     if (AnyReaction == null)
                     {
                         Reaction newReaction = new Reaction
