@@ -3,14 +3,13 @@ import Publisher from "../../shared_components/publisher/publisher";
 import Feed from "../../shared_components/feed/feed";
 import AsideBar from "./aside-bar/aside-bar";
 import {lsUserKey} from "../../constants/keys";
-import SmallList from '../../shared_components/small-list/small-list';
-import {Modal} from "@material-ui/core";
 import {
     devRootURL,
     followedCommunityApiURLs,
-    followedUserApiURLs,
+    followedUserApiURLs, postApiURLs,
     userApiURLs
 } from "../../constants/api-url";
+import {Post} from "../../../models/post";
 
 
 class Profile extends React.Component{
@@ -18,7 +17,8 @@ class Profile extends React.Component{
     state = {
         followers : [],
         openModal: false,
-        selectedList: []
+        selectedList: [],
+        posts: []
     };
 
 
@@ -80,12 +80,34 @@ class Profile extends React.Component{
             })
             .catch(err => console.log(err));
 
+        fetch(`${devRootURL}${postApiURLs.getUserPosts(userId)}`,{
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then((json)=>{
+
+                let postList = json.map(
+                    (post) => {
+
+                        return new Post(post.id,
+                            post.content,
+                            post.creationDate,
+                            {id: post.authorId, name: post.nickName, nickname: post.nickName},
+                            {id: post.communityId, name: post.communityName}
+                            );
+
+                    }
+                );
+
+                this.setState({
+                    posts: [...postList]
+                });
+
+
+            })
+            .catch(err => console.log(err));
 
     }
-
-
-
-
 
     render(){
 
@@ -112,7 +134,7 @@ class Profile extends React.Component{
                     </article>
 
                     <Publisher className={"w-full"} username={JSON.parse(localStorage.getItem('woofer-user-ac')).acc}/>
-                    <Feed posts={[]}/>
+                    <Feed posts={this.state.posts}/>
                 </div>
                 <AsideBar followers={this.state.followers===undefined?[]:[...this.state.followers]}
                           followedUsers={this.state.followedUsers===undefined?[]:[...this.state.followedUsers]}

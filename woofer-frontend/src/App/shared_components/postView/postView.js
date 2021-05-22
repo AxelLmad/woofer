@@ -3,11 +3,56 @@ import atIcon from '../../../img/icon/at-symbol.svg';
 import likeIcon from '../../../img/icon/heart.svg';
 import dislikeIcon from '../../../img/icon/thumb-down.svg';
 import amazingIcon from '../../../img/icon/lightning-bolt.svg';
+import {devRootURL, postPictureApiURLs} from "../../constants/api-url";
+import firebase from "firebase";
+import {Modal} from "@material-ui/core";
+import CommentBox from "../commentBox/commentBox";
 
 
 class PostView extends React.Component{
 
     replies = ['','',''];
+
+    state = {
+
+        picture: null,
+        comment: false
+
+    }
+
+    constructor(props) {
+        super(props);
+
+        let nullPicture = false;
+        fetch(`${devRootURL}${postPictureApiURLs.byPostId(this.props.id)}`,{
+            method: 'GET'
+        })
+            .then(response => response.status===200?response.json():nullPicture = true)
+            .then((json)=>{
+                if(!nullPicture){
+
+                    const storageRef = firebase.storage().ref();
+                    const starsRef = storageRef.child(json[0].serverPath);
+
+                    starsRef.getDownloadURL().then((url) => {
+                        this.setState({picture: url});
+                    }).catch(function(error) {
+
+                        switch (error.code) {
+                            case 'storage/object-not-found':
+                                console.log('Object does not exist');
+                                break;
+                        }
+                    });
+
+
+                }
+
+
+            })
+            .catch(err => console.log(err));
+    }
+
 
     render() {
 
@@ -21,10 +66,20 @@ class PostView extends React.Component{
 
                     <span className={"mt-2 border rounded p-2 shadow-innerW"}>{this.props.content}</span>
 
+                    {(this.state.picture !== null)?<figure className={"mt-2 border rounded p-2 shadow-innerW max-w-xl"}>
+                        <img src={this.state.picture} alt="post"/>
+                    </figure>: ''}
+
+
                     <p className={"self-end border border-opacity-50 border-l-0 border-r-0 mt-1 text-sm"}>{this.props.creationDate}</p>
 
                     <div className={"self-center mt-12 flex flex-row xl:mt-24 "}>
-                        <div className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
+                        <div onClick={()=>{
+
+                            this.setState({comment: true})
+
+                        }}
+                            className={"ml-6 p-1.5 rounded-full hover:bg-light cursor-pointer"}>
                             <button><img src={atIcon} alt="Responder"/></button>
                             <span className={"bold text-gray-800"}>{this.replies.length}</span>
                         </div>
@@ -55,6 +110,9 @@ class PostView extends React.Component{
 
                 </aside>
 
+                <Modal open={this.state.comment}>
+                    {<CommentBox id={this.props.id} communityId={this.props.communityId}/>}
+                </Modal>
             </section>
         );
     }

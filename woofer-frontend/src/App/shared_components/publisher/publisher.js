@@ -3,7 +3,7 @@ import {Modal} from "@material-ui/core";
 import backIcon from '../../../img/icon/arrow-left.svg';
 import picIcon from '../../../img/icon/photograph.svg';
 import {devRootURL, followedCommunityApiURLs, postApiURLs, userApiURLs} from "../../constants/api-url";
-import {firebaseConfig, lsUserKey} from "../../constants/keys";
+import {lsUserKey} from "../../constants/keys";
 import {Community} from "../../../models/community";
 import firebase from 'firebase';
 import {randomString} from "../randomString";
@@ -26,6 +26,7 @@ class Publisher extends React.Component{
         this.handleContentChange = this.handleContentChange.bind(this);
         this.handleCommunityChange = this.handleCommunityChange.bind(this);
         this.handlePictureChange = this.handlePictureChange.bind(this);
+
 
         const userId = JSON.parse(localStorage.getItem(lsUserKey)).id;
 
@@ -71,26 +72,10 @@ class Publisher extends React.Component{
     };
 
     handlePictureChange($e) {
+
         this.setState({ pictureFile:  $e.target.files[0] });
     };
 
-    uploadImage() {
-
-        const storageRef = firebase.storage().ref(`/${this.state.pictureFile.name}${randomString(12)}`);
-
-        const task = storageRef.put(this.state.pictureFile);
-
-        task.on( (error) => {
-
-            console.log(error);
-
-        },() => {
-            console.log(storageRef.name);
-            return storageRef.name;
-
-        });
-
-    }
 
     publish() {
 
@@ -103,29 +88,79 @@ class Publisher extends React.Component{
 
         }
 
+        const file = this.state.pictureFile;
 
-        const picturePath = this.state.pictureFile!==null?this.uploadImage():null;
+        if (file !== null) {
 
-        const postBody = JSON.stringify(
-        {
-                content: this.state.content,
-                authorId: acc.id,
-                communityId: this.state.communityId,
-                lastPostId: null
-            }
-        );
-        fetch(`${devRootURL}${postApiURLs.create}`,{
-            method: 'POST',
-            headers: {'Content-type': 'application/json;charset=UTF-8'},
-            body: postBody
-        })
-            .then(response => {if(response.status === 200) {
+            const storageRef = firebase.storage().ref(`/${file.name}__${randomString(12)}`);
 
-                this.toggleOpenModal(false);
+            const task = storageRef.put(file);
 
-            }
-        })
-            .catch(err => console.log(err));
+            task.on('state_changed',
+                snapshot => {
+                },
+                error => {
+                    console.log(error)
+                },
+                () => {
+
+                    const postBody = JSON.stringify(
+                        {
+                            content: this.state.content,
+                            authorId: acc.id,
+                            communityId: this.state.communityId,
+                            lastPostId: null,
+                            serverPathImg: storageRef.name
+                        }
+                    );
+                    fetch(`${devRootURL}${postApiURLs.create}`, {
+                        method: 'POST',
+                        headers: {'Content-type': 'application/json;charset=UTF-8'},
+                        body: postBody
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+
+                                this.toggleOpenModal(false);
+
+                            }
+                        })
+                        .catch(err => console.log(err));
+
+                }
+            );
+        }
+
+        else{
+
+            const postBody = JSON.stringify(
+                {
+                    content: this.state.content,
+                    authorId: acc.id,
+                    communityId: this.state.communityId,
+                    lastPostId: null,
+                    serverPathImg: null
+                }
+            );
+
+            fetch(`${devRootURL}${postApiURLs.create}`, {
+                method: 'POST',
+                headers: {'Content-type': 'application/json;charset=UTF-8'},
+                body: postBody
+            })
+                .then(response => {
+                    if (response.status === 200) {
+
+                        this.toggleOpenModal(false);
+
+                    }
+                })
+                .catch(err => console.log(err));
+
+        }
+
+
+
 
     }
 

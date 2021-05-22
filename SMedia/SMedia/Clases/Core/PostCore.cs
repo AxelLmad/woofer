@@ -206,13 +206,19 @@ namespace SMedia.Clases.Core
                     newPost.CreationDate = DateTime.Now;
                     newPost.Active = true;
                     newPost.LastPostId = post.lastPostId;
+
                     dbContext.Add(newPost);
                     dbContext.SaveChanges();
-                    newPost = dbContext.Post.OrderBy(x=>x.Id).Last();
-                    PostPicture picture = new();
-                    picture.ServerPath = post.ServerPathImg;
-                    picture.PostId = newPost.Id;
-                    dbContext.Add(picture);
+                    if (post.ServerPathImg != null)
+                    {
+
+                        PostPicture picture = new();
+                        picture.ServerPath = post.ServerPathImg;
+                        picture.PostId = newPost.Id;
+                        dbContext.Add(picture);
+
+                    }
+
                     dbContext.SaveChanges();
                     return true;
                 }

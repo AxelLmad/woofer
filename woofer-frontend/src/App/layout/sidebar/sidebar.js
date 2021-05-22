@@ -63,7 +63,6 @@ class Sidebar extends React.Component{
                         <span>Configuración</span> <img className={"w-6 ml-4"} src={configIcon} alt="configuracion"/>
                     </Link>
 
-                    <button className={"rounded-full w-64 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary"}>Publicar</button>
 
                 </nav>
             </div>

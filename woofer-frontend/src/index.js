@@ -6,7 +6,7 @@ import firebase from "firebase";
 import {firebaseConfig} from "./App/constants/keys";
 
 const fApp = firebase.initializeApp(firebaseConfig);
-
+console.log(fApp);
 ReactDOM.render(
   <App/>,
   document.getElementById('root')

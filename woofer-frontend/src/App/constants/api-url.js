@@ -12,7 +12,8 @@ export const userApiURLs = {
 export const postApiURLs = {
 
     create: '/api/Post/CreatePost',
-    getLastPosts: (id) => {return `/api/Post/GetLastPosts/${id}`}
+    getLastPosts: (id) => {return `/api/Post/GetLastPosts/${id}`},
+    getUserPosts: (id) => {return `/api/Post/GetPostUser/${id}`}
 
 };
 
@@ -28,3 +29,9 @@ export const followedUserApiURLs = {
     getFollowedUsers: (id) => {return `/api/FollowedUser/FollowedUsers/${id}`}
 
 };
+
+export const postPictureApiURLs = {
+
+    byPostId: (id) => {return `/api/PostPicture/ByPostId/${id}`}
+
+}

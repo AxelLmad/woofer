@@ -12,8 +12,10 @@ class Feed extends React.Component{
             return (
                 <li key={keyCounter++}>
                     <PostView
+                        id={post.id}
                         className={"min-w-full"}
                         communityName={post.community.name}
+                        communityId={post.community.id}
                         content={post.content}
                         creationDate={post.creationDate}
                         userName={post.author.name}
