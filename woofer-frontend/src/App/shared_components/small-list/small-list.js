@@ -2,7 +2,6 @@ import React from 'react';
 import backIcon from "../../../img/icon/arrow-left.svg";
 import SmallListCard from "./small-list-card";
 import {User} from '../../../models/user';
-import {Community} from "../../../models/community";
 
 
 class SmallList extends React.Component{

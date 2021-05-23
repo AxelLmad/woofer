@@ -3,7 +3,6 @@ import menuIcon from '../../../img/icon/menu.svg';
 import { Link } from "react-router-dom";
 import logoIcon from '../../../logo.svg';
 import userIcon from '../../../img/icon/user.svg';
-import fireIcon from '../../../img/icon/fire.svg';
 import userGroupIcon from '../../../img/icon/user-group.svg';
 import configIcon from '../../../img/icon/cog.svg';
 import {currentIP, lsUserKey} from "../../constants/keys";
