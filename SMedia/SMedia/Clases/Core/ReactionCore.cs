@@ -21,6 +21,16 @@ namespace SMedia.Clases.Core
                 bool AnyPost = dbContext.Post.Any(post => post.Id == reaction.PostId);
                 if (AnyUser && AnyPost)
                 {
+                    if(reaction.Type == 1)
+                    {
+                        FavoritePost favoritePost = new FavoritePost()
+                        {
+                            UserId = reaction.UserId,
+                            PostId = reaction.PostId
+                        };
+                        dbContext.Add(favoritePost);
+                        dbContext.SaveChanges();
+                    }
                     Reaction AnyReaction = dbContext.Reaction.FirstOrDefault(reaction => reaction.PostId == reaction.PostId
                                             && reaction.UserId == reaction.UserId);
                     if (AnyReaction == null)
