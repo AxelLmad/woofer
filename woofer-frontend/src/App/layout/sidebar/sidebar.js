@@ -2,10 +2,11 @@ import React from 'react';
 import menuIcon from '../../../img/icon/menu.svg';
 import { Link } from "react-router-dom";
 import logoIcon from '../../../logo.svg';
-import notifIcon from '../../../img/icon/notif.svg';
+import userIcon from '../../../img/icon/user.svg';
 import fireIcon from '../../../img/icon/fire.svg';
 import userGroupIcon from '../../../img/icon/user-group.svg';
 import configIcon from '../../../img/icon/cog.svg';
+import {currentIP, lsUserKey} from "../../constants/keys";
 
 class Sidebar extends React.Component{
 
@@ -47,23 +48,19 @@ class Sidebar extends React.Component{
                         <span>Inicio</span> <img className={"w-6 ml-4"} src={logoIcon} alt="woofer"/>
                     </Link>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/test"}>
-                        <span>Notificaciones</span> <img className={"w-6 ml-4"} src={notifIcon} alt="notificaciones"/>
-                    </Link>
+                    <div onClick={()=>{window.location.href = `http://${currentIP}/profile/${JSON.parse(localStorage.getItem(lsUserKey)).acc}`}}
+                        className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight cursor-pointer"}>
+                        <span>Perfil</span> <img className={"w-6 ml-4"} src={userIcon} alt="perfil"/>
+                    </div>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/"}>
-                        <span>Siguiendo</span> <img className={"w-6 ml-4"} src={fireIcon} alt="siguiendo"/>
-                    </Link>
-
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/"}>
+                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/communities"}>
                         <span>Comunidades</span> <img className={"w-6 ml-4"} src={userGroupIcon} alt="comunidades"/>
                     </Link>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/"}>
+                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/configuration"}>
                         <span>Configuración</span> <img className={"w-6 ml-4"} src={configIcon} alt="configuracion"/>
                     </Link>
 
-                    <button className={"rounded-full w-64 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary"}>Publicar</button>
 
                 </nav>
             </div>

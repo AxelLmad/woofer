@@ -3,7 +3,6 @@ using SMedia.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SMedia.Clases.Core
 {
@@ -75,7 +74,9 @@ namespace SMedia.Clases.Core
                         join C in dbContext.Community on FC.CommunityId equals C.Id
                         join U in dbContext.User on LP.AuthorId equals U.Id
                         where LP.Active
-                        orderby LP.CreationDate
+                        
+                        orderby LP.CreationDate descending
+                        
                         select new LastPostsModel()
                         {
                             Id = LP.Id,
@@ -103,7 +104,7 @@ namespace SMedia.Clases.Core
                         join U in dbContext.User on FU.FollowedId equals U.Id
                         join C in dbContext.Community on LP.CommunityId equals C.Id
                         where LP.Active
-                        orderby LP.CreationDate
+                        orderby LP.CreationDate descending
                         select new LastPostsModel()
                         {
                             Id = LP.Id,
@@ -125,8 +126,10 @@ namespace SMedia.Clases.Core
                             LastPostActive = LP.LastPost.Active
                         }).Take(10).ToList();
                     List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
+
                     SetViews(lp, id);
                     return lp;
+
                 }
                 return null;
             }
@@ -146,6 +149,7 @@ namespace SMedia.Clases.Core
                                                       join U in dbContext.User on P.AuthorId equals U.Id
                                                       join C in dbContext.Community on P.CommunityId equals C.Id
                                                       where (P.AuthorId == id && P.Active)
+                                                      orderby P.CreationDate descending
                                                       select new LastPostsModel()
                                                       {
                                                           Id = P.Id,
@@ -308,13 +312,19 @@ namespace SMedia.Clases.Core
                     newPost.CreationDate = DateTime.Now;
                     newPost.Active = true;
                     newPost.LastPostId = post.lastPostId;
+
                     dbContext.Add(newPost);
                     dbContext.SaveChanges();
-                    newPost = dbContext.Post.OrderBy(x=>x.Id).Last();
-                    PostPicture picture = new();
-                    picture.ServerPath = post.ServerPathImg;
-                    picture.PostId = newPost.Id;
-                    dbContext.Add(picture);
+                    if (post.ServerPathImg != null)
+                    {
+
+                        PostPicture picture = new();
+                        picture.ServerPath = post.ServerPathImg;
+                        picture.PostId = newPost.Id;
+                        dbContext.Add(picture);
+
+                    }
+
                     dbContext.SaveChanges();
                     return true;
                 }

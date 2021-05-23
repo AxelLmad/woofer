@@ -20,7 +20,7 @@ namespace SMedia.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetReactPost([FromBody] Reaction reaction)
+        public IActionResult SetReactPost([FromBody] GetReaction reaction)
         {
             try
             {

@@ -81,45 +81,57 @@ namespace SMedia.Clases.Core
                         && s.Active == true
                         select s
                         ).FirstOrDefault();
-                UserPicture pic = (from s in dbContext.UserPicture
-                                   where (s.UserId == user.Id && s.ServerPath == sUser.ServerPath)
-                                   select s).FirstOrDefault();
+                UserPicture pic = null;
+                if (sUser.ServerPath != null)
+                {
+                    pic = (from s in dbContext.UserPicture
+                                       where (s.Id == user.Id && s.ServerPath == sUser.ServerPath)
+                                       select s).FirstOrDefault();
+                }
                 if (user != null) {
                     user.NickName = sUser.NickName;
-                    user.Password = sUser.Password;
+                    if(sUser.Password != null)
+                    {
+                        user.Password = sUser.Password;
+                    }
                     user.Email = sUser.Email;
                     user.Name = sUser.Name;
                     user.LastName = sUser.LastName;
                     dbContext.SaveChanges();
-                    if (pic == null)
+                    if(sUser.ServerPath != null)
                     {
-                        pic = new UserPicture();
-                        pic.ServerPath = sUser.ServerPath;
-                        pic.Active = true;
-                        pic.UserId = user.Id;
-                        dbContext.Add(pic);
-                        List<UserPicture> pictures = (from s in dbContext.UserPicture
-                                                      where s.UserId == user.Id
-                                                      select s).ToList();
-                        foreach (UserPicture up in pictures)
+                        if (pic == null)
                         {
-                            up.Active = false;
+                            pic = new UserPicture();
+                            pic.ServerPath = sUser.ServerPath;
+                            pic.Active = true;
+                            pic.UserId = user.Id;
+                            dbContext.Add(pic);
+                            List<UserPicture> pictures = (from s in dbContext.UserPicture
+                                                          where s.UserId == user.Id
+                                                          select s).ToList();
+                            foreach (UserPicture up in pictures)
+                            {
+                                up.Active = false;
+                            }
+                            dbContext.SaveChanges();
                         }
-                        dbContext.SaveChanges();
-                    }
-                    else{
-                        List<UserPicture> pictures = (from s in dbContext.UserPicture
-                                                where s.UserId == user.Id
-                                                select s).ToList();
-                        foreach (UserPicture up in pictures)
+                        else
                         {
-                            up.Active = false;
+                            List<UserPicture> pictures = (from s in dbContext.UserPicture
+                                                          where s.UserId == user.Id
+                                                          select s).ToList();
+                            foreach (UserPicture up in pictures)
+                            {
+                                up.Active = false;
+                            }
+                            pic.Active = true;
+                            dbContext.SaveChanges();
                         }
-                        pic.Active = true;
-                        dbContext.SaveChanges();
                     }
+                    
 
-                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, pic.ServerPath, user.RegisterDate, user.LastLogin);
+                    return new FixedUser(user.Id, user.NickName, user.Email, user.Name, user.LastName, "", user.RegisterDate, user.LastLogin);
                 }
                 return null;
             }

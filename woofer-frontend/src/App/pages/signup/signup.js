@@ -1,7 +1,8 @@
 import React from 'react';
-import logoIcon from '../../logo.svg';
-import { devRootURL, userApiURLs } from '../constants/api-url';
-import {ErrorLog } from '../ErrorLog/errorLog';
+import logoIcon from '../../../logo.svg';
+import { devRootURL, userApiURLs } from '../../constants/api-url';
+import {ErrorLog } from '../../ErrorLog/errorLog';
+import {currentIP, lsUserKey} from "../../constants/keys";
 
 
 class Signup extends React.Component {
@@ -97,8 +98,18 @@ class Signup extends React.Component {
         })
             .then(response => response.json())
             .then((res)=>{
-                localStorage.setItem('woofer-user-ac', JSON.stringify({acc: this.state.nickname, id: res}));
-                window.location.href ='http://localhost:3000/';
+                if (res === -1){
+
+                    this.setState({errorLog: ['El nickname y/o correo están ya en uso']})
+
+                }
+
+                else{
+                    localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: res}));
+
+                    window.location.href =`http://${currentIP}/`;
+                }
+
             })
             .catch(err => console.log(err));
     };
@@ -119,31 +130,31 @@ class Signup extends React.Component {
                     <div className={"flex flex-col w-1/3 mb-2"}>
                         <label className={"text-white"} htmlFor="nickname">Nickname</label>
                         <input onChange={this.handleNicknameChange}
-                            className={"h-7 px-5 py-2 rounded"} type="text" id={"nickname"}/>
+                               className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="text" id={"nickname"}/>
                     </div>
 
                     <div className={"flex flex-col w-1/3 mb-2"}>
                         <label className={"text-white"} htmlFor="email">Correo</label>
                         <input onChange={this.handleEmailChange}
-                            className={"h-7 px-5 py-2 rounded"} type="email" id={"email"}/>
+                               className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="email" id={"email"}/>
                     </div>
 
                     <div className={"flex flex-col w-1/3 mb-2"}>
                         <label className={"text-white"} htmlFor="password">Contraseña</label>
                         <input onChange={this.handlePasswordChange}
-                            className={"h-7 px-5 py-2 rounded"} type="password" id={"password"}/>
+                               className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="password" id={"password"}/>
                     </div>
 
                     <div className={"flex flex-col w-1/3 mb-2"}>
                         <label className={"text-white"} htmlFor="name">Nombre</label>
                         <input onChange={this.handleNameChange}
-                            className={"h-7 px-5 py-2 rounded"} type="text" id={"name"}/>
+                               className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="text" id={"name"}/>
                     </div>
 
                     <div className={"flex flex-col w-1/3"}>
                         <label className={"text-white"} htmlFor="lastName">Apellidos</label>
                         <input onChange={this.handleLastNameChange}
-                            className={"h-7 px-5 py-2 rounded"} type="text" id={"lastName"}/>
+                               className={"h-7 px-5 py-2 rounded bg-dark border border-white text-white"} type="text" id={"lastName"}/>
                     </div>
 
                     <button onClick={this.register}
