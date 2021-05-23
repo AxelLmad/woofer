@@ -13,37 +13,30 @@ namespace SMedia.Clases.Core
         {
             this.dbContext = dbContext;
         }
-
-        public List<User> GetAll()
-        {
-
-            try
-            {
-                List<User> users = (
-                   from s in dbContext.User
-                   where s.Active == true
-                   select s
-                   ).ToList();
-                return users;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-        public User ById(long id)
+        public ReturnUser ById(long id)
         {
             try
             {
-                User user = (
+                ReturnUser user = (
                    from s in dbContext.User
+                   join f in dbContext.UserPicture on s.Id equals f.UserId
                    where s.Id == id
                    && s.Active == true
-                   select s
-                   ).FirstOrDefault();
+                   select new ReturnUser
+                   {
+                       Id = s.Id,
+                       NickName = s.NickName,
+                       Email = s.Email,
+                       Name = s.Name,
+                       LastName = s.LastName,
+                       Picture = f.ServerPath,
+                       RegisterDate = s.RegisterDate,
+                       LastLogin = s.LastLogin
+                   }).FirstOrDefault();
                 if(user != null)
+                {
                     return user;
+                }
                 return null;
             }
             catch (Exception ex)
@@ -64,6 +57,10 @@ namespace SMedia.Clases.Core
                                         where s.Active
                                         select s
                                         ).Take(6).ToList();
+                    foreach(User u in user)
+                    {
+                        u.Password = null;
+                    }
                     return user;
                 }
                 return null;
@@ -196,13 +193,24 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-        public List<User> SearchUser(string Nick)
+        public List<ReturnUser> SearchUser(string Nick)
         {
             try
             {
-                List<User> Mathches = (from U in dbContext.User
-                                            where (U.NickName.Contains(Nick) && U.Active)
-                                            select U).ToList();
+                List<ReturnUser> Mathches = (from U in dbContext.User
+                                             join P in dbContext.UserPicture on U.Id equals P.UserId
+                                            where (U.NickName.Contains(Nick) && U.Active && P.Active)
+                                            select new ReturnUser() 
+                                            { 
+                                                Id = U.Id,
+                                                NickName = U.NickName,
+                                                Email = U.NickName,
+                                                Name = U.Name,
+                                                LastName = U.LastName,
+                                                Picture = P.ServerPath,
+                                                RegisterDate = U.RegisterDate,
+                                                LastLogin = U.LastLogin
+                                            }).ToList();
                 return Mathches;
             }
             catch(Exception ex)
@@ -210,7 +218,6 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
-
         public long SignUp(SignUpUser sUser)
         {
             try
@@ -241,6 +248,7 @@ namespace SMedia.Clases.Core
                 throw ex;
             }
         }
+
         public bool validUser(SignUpUser user)
         {
             bool anyUser = dbContext.User.Any(u => u.NickName == user.NickName);
