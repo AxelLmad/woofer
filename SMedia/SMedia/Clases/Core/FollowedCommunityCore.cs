@@ -56,14 +56,14 @@ namespace SMedia.Clases.Core
 
         }
 
-        public bool Delete(long id)
+        public bool Delete(CreationFollowedCommunity follow)
         {
 
             try
             {
                 FollowedCommunity followedCommunity = (
                    from s in dbContext.FollowedCommunity
-                   where s.Id == id
+                   where (s.FollowerId == follow.FollowerId && s.CommunityId == follow.CommunityId)
                    select s
                    ).FirstOrDefault();
                 if (followedCommunity != null)
