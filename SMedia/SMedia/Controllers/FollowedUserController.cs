@@ -62,14 +62,14 @@ namespace SMedia.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] long id)
+        [HttpDelete]
+        public IActionResult Delete([FromBody] CreationFollowedUser follow)
         {
             try
             {
                 FollowedUserCore core = new FollowedUserCore(dbContext);
-                bool follow = core.Delete(id);
-                if(follow)
+                bool following = core.Delete(follow);
+                if(following)
                     return Ok();
                 return NotFound();
             }
