@@ -2,7 +2,7 @@ import React from 'react';
 import {Post} from "../../../models/post";
 import Feed from "../../shared_components/feed/feed";
 import Publisher from "../../shared_components/publisher/publisher";
-import AsideBar from "./aside-bar/aside-bar";
+import AsideBar from "../communities/aside-bar/aside-bar";
 import {devRootURL, postApiURLs} from "../../constants/api-url";
 import {currentIP, lsUserKey} from "../../constants/keys";
 
@@ -37,7 +37,7 @@ class Home extends React.Component{
                         element.content,
                         element.creationDate,
                         {id: element.authorId, name: element.name, nickname: element.nickName},
-                        {name: element.communityName, id: element.communityId});
+                        {name: element.communityName, id: element.communityId, color: element.color});
 
                 });
 

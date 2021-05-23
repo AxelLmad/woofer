@@ -1,3 +1,5 @@
+import firebase from "firebase";
+
 export class Community{
 
     constructor({id = 0, name = '', color = '', description = '', picture = '', creationDate = '', authorId = 0}) {
@@ -11,6 +13,8 @@ export class Community{
         this.authorId = authorId;
 
     }
+
+
 
     id;
     name;

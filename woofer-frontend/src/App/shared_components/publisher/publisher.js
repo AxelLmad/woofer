@@ -7,7 +7,8 @@ import {
     followedCommunityApiURLs,
     postApiURLs,
     userApiURLs,
-    userPictureApiURLs
+    userPictureApiURLs,
+    communityApiURLs
 } from "../../constants/api-url";
 import {currentIP, lsUserKey} from "../../constants/keys";
 import {Community} from "../../../models/community";
@@ -65,7 +66,28 @@ class Publisher extends React.Component{
                 });
 
                 this.setState({communities: [...followedCommunities]});
-                this.setState({communityId: followedCommunities[0].id});
+
+                fetch(`${devRootURL}${communityApiURLs.getUserCreated(userId)}`,{
+                    method: 'GET'
+                })
+                    .then(response => response.json())
+                    .then((json)=>{
+
+                        const followedCommunities = json.map((com) => {
+
+                            return new Community({id: com.id, name: com.name,
+                                color: com.color, description: com.description,
+                                creationDate: com.creationDate, authorId: com.authorId,
+                                picture: com.picture
+                            });
+
+                        });
+
+                        this.setState({communities: [...(followedCommunities.concat(this.state.communities))]});
+                        this.setState({communityId: this.state.communities[0].id});
+
+                    })
+                    .catch(err => console.log(err));
 
             })
             .catch(err => console.log(err));

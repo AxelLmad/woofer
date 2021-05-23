@@ -6,7 +6,7 @@ class Feed extends React.Component{
     renderPosts() {
 
         let keyCounter = 0;
-
+        console.log(this.props.posts);
         return this.props.posts.map((post) => {
 
             return (
@@ -20,7 +20,8 @@ class Feed extends React.Component{
                         creationDate={post.creationDate}
                         userId={post.author.id}
                         userName={post.author.name}
-                        userNickname={post.author.nickname}/>
+                        userNickname={post.author.nickname}
+                        color={post.community.color}/>
                 </li>
             );
 

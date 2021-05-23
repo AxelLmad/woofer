@@ -75,7 +75,7 @@ namespace SMedia.Clases.Core
                         join U in dbContext.User on LP.AuthorId equals U.Id
                         where LP.Active
                         
-                        orderby LP.CreationDate
+                        orderby LP.CreationDate descending
                         
                         select new LastPostsModel()
                         {
@@ -104,7 +104,7 @@ namespace SMedia.Clases.Core
                         join U in dbContext.User on FU.FollowedId equals U.Id
                         join C in dbContext.Community on LP.CommunityId equals C.Id
                         where LP.Active
-                        orderby LP.CreationDate
+                        orderby LP.CreationDate descending
                         select new LastPostsModel()
                         {
                             Id = LP.Id,
@@ -180,6 +180,7 @@ namespace SMedia.Clases.Core
                                                       join U in dbContext.User on P.AuthorId equals U.Id
                                                       join C in dbContext.Community on P.CommunityId equals C.Id
                                                       where (P.AuthorId == id && P.Active)
+                                                      orderby P.CreationDate descending
                                                       select new LastPostsModel()
                                                       {
                                                           Id = P.Id,

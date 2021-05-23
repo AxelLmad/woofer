@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import searchIcon from '../../../img/icon/search.svg';
-import mailIcon from '../../../img/icon/mail.svg';
 import userIcon from '../../../img/icon/user.svg';
 import logoIcon from '../../../logo.svg';
 
@@ -23,9 +22,7 @@ class Header extends React.Component{
                     </figure>
                 </div>
                 <nav className={"flex flex-row justify-around items-end mr-2 md:mr-8 mb-4"}>
-                    <figure className={"bg-light text-primary cursor-pointer mr-1 md:mr-2 hover:bg-primary md:w-12 md:h-8 rounded-full"}>
-                        <img className={"transform md:scale-150 mx-auto md:mt-2"} src={mailIcon} alt="Mensajes"/>
-                    </figure>
+
                     <figure className={"bg-light cursor-pointer ml-1 md:ml-2 hover:bg-primary md:w-12 md:h-8 rounded-full"}>
                         <img className={"transform md:scale-150 mx-auto md:mt-2"} src={userIcon} alt="Usuario"/>
                     </figure>

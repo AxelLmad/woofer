@@ -257,7 +257,7 @@ class Configuration extends React.Component{
                     </div>
 
                     <div className={"flex flex-col mb-2 mx-auto mt-4"}>
-                        <label className={"text-white"} htmlFor="newPassword">Name</label>
+                        <label className={"text-white"} htmlFor="name">Name</label>
                         <input onChange={($e) => {
                             this.setState({name: $e.target.value});
                         }}
@@ -265,7 +265,7 @@ class Configuration extends React.Component{
                     </div>
 
                     <div className={"flex flex-col mb-2 mx-auto mt-2"}>
-                        <label className={"text-white"} htmlFor="confirmPassword">Last name</label>
+                        <label className={"text-white"} htmlFor="lastName">Last name</label>
                         <input onChange={($e) => {
                             this.setState({lastName: $e.target.value});
                         }}
@@ -273,11 +273,11 @@ class Configuration extends React.Component{
                     </div>
 
                     <div className={"flex flex-col mb-2 mx-auto mt-2"}>
-                        <label className={"text-white"} htmlFor="confirmPassword">Avatar</label>
+                        <label className={"text-white"} htmlFor="picture">Avatar</label>
                         <label>
                             <img className={"transform scale-150"} src={picIcon} alt="Imagen"/>
                             <input onChange={($e) => {this.setState({ pictureFile:  $e.target.files[0] });}}
-                                   className={"hidden"} type="file" accept="image/png, image/jpeg"/>
+                                   id={"picture"} className={"hidden"} type="file" accept="image/png, image/jpeg"/>
                         </label>
                     </div>
                 </section>}

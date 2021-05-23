@@ -6,7 +6,16 @@ export const userApiURLs = {
     getById: (id) => {return `/api/User/ById/${id}`},
     signUp: '/api/User/SignUp',
     login: '/api/User/Login',
-    edit: '/api/User/Edit'
+    edit: '/api/User/Edit',
+    byNickName: (nickname)=>{return `/api/User/SearchUser/${nickname}`},
+
+};
+
+export const communityApiURLs = {
+
+    create: '/api/Community/Create',
+    getUserCreated: (id) => {return `/api/Community/UserCreatedCommunity/${id}`},
+    random: '/api/Community/GetRandomCommunity'
 
 };
 
@@ -43,6 +52,7 @@ export const userPictureApiURLs = {
     byUserId: (id) => {return `/api/UserPicture/GetCurrentPicture/${id}`}
 
 }
+
 
 export const reactionApiURLs = {
 

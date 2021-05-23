@@ -19,6 +19,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Feed from "../feed/feed";
 import {Post} from "../../../models/post";
 import backIcon from "../../../img/icon/arrow-left.svg";
+import { Link } from "react-router-dom";
 
 
 class PostView extends React.Component{
@@ -59,7 +60,7 @@ class PostView extends React.Component{
                         element.content,
                         element.creationDate,
                         {id: element.authorId, name: element.name, nickname: element.nickName},
-                        {name: element.communityName, id: element.communityId});
+                        {name: element.communityName, id: element.communityId, color: element.color});
 
                 });
 
@@ -203,7 +204,7 @@ class PostView extends React.Component{
 
                 <article className={"ml-4 flex flex-col h-full w-11/12"}>
 
-                    <h4 className={"font-semibold bg-midnight text-gray-100 px-2 cursor-pointer pt-1.5 "}>{this.props.communityName}</h4>
+                    <h4 className={`font-semibold text-gray-100 px-2 cursor-pointer pt-1.5 ${this.props.color}`}>{this.props.communityName}</h4>
 
                     <span className={"mt-2 border rounded p-2 shadow-innerW"}>{this.props.content}</span>
 
@@ -276,7 +277,8 @@ class PostView extends React.Component{
                     <figure className={"w-32 md:shadow-innerW bg-gray-900 md:h-48 md:px-4 md:pt-6 rounded"}>
                         <img className={"rounded-full md:shadow-white"} src={this.state.userPicture} alt="avatar"/>
                         <figcaption className={"md:mt-4 mx-auto text-center w-100"}>{this.props.userName}</figcaption>
-                        <p className={"text-xs text-center mb-2 md:mb-0 md:mt-2 underline cursor-pointer"}>@{this.props.userNickname}</p>
+                        <Link to={`/profile/${this.props.userNickname}`}
+                            className={"text-xs text-center mb-2 md:mb-0 md:mt-2 underline cursor-pointer ml-7"}>@{this.props.userNickname}</Link>
                     </figure>
 
                 </aside>

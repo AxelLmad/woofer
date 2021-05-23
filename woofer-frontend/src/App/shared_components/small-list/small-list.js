@@ -2,6 +2,7 @@ import React from 'react';
 import backIcon from "../../../img/icon/arrow-left.svg";
 import SmallListCard from "./small-list-card";
 import {User} from '../../../models/user';
+import {Community} from "../../../models/community";
 
 
 class SmallList extends React.Component{
@@ -44,8 +45,10 @@ class SmallList extends React.Component{
         let key = 0;
         return this.props.list.map((el) => {
 
-            return (<li key={key++}><SmallListCard id={el.id} name={el.name}
-                                   type={(el instanceof User)?'user':'community'}/></li>);
+            return (<li key={key++}><SmallListCard id={el.id} name={el.name} description={el.description} color={el.color}
+                                   type={(el instanceof User)?'user':'community'}
+                                    picture={el.picture}
+            /></li>);
 
     });
     }
@@ -56,7 +59,7 @@ class SmallList extends React.Component{
 
             <section className={"flex flex-col bg-dark w-full h-full md:w-5/6 md:h-3/4 m-auto md:mt-40 text-white py-4 shadow-innerW"}>
 
-                    <button onClick={()=>this.toggleOpenModal()} className={" text-white "}>
+                    <button onClick={() => this.props.closeModal()} className={" text-white "}>
                         <img src={backIcon} alt="Back"/>
                     </button>
 

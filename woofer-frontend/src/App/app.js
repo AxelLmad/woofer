@@ -7,6 +7,29 @@ import Home from "./pages/home/home";
 import Signup from "./pages/signup/signup";
 import Profile from './pages/profile/profile';
 import Configuration from "./pages/configuration/configuration";
+import Communities from './pages/communities/communities';
+
+class ProfileContainer extends React.Component{
+
+    state = {
+
+
+    }
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render(){
+
+        return  <Layout>
+            <Profile nickname={this.props.match.params.nickname}/>
+        </Layout>
+
+    }
+
+}
 
 class App extends React.Component{
 
@@ -46,10 +69,16 @@ class App extends React.Component{
 
                         </Route>
 
-                        <Route exact path='/profile'>
+                        <Route path='/profile/:nickname' component={ProfileContainer}>
+
+                        </Route>
+
+                        <Route exact path='/communities/'>
+
                             <Layout>
-                                <Profile/>
+                                <Communities/>
                             </Layout>
+
                         </Route>
 
                         <Route exact path='/configuration'>
@@ -57,6 +86,7 @@ class App extends React.Component{
                                 <Configuration/>
                             </Layout>
                         </Route>
+
                     </Switch>
                 </BrowserRouter>
 
