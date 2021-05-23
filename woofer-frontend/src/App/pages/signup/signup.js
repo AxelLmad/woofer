@@ -98,8 +98,18 @@ class Signup extends React.Component {
         })
             .then(response => response.json())
             .then((res)=>{
-                localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: res}));
-                window.location.href =`http://${currentIP}/`;
+                if (res === -1){
+
+                    this.setState({errorLog: ['El nickname y/o correo están ya en uso']})
+
+                }
+
+                else{
+                    localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: res}));
+
+                    window.location.href =`http://${currentIP}/`;
+                }
+
             })
             .catch(err => console.log(err));
     };

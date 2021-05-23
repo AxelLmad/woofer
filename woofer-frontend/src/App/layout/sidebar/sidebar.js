@@ -6,7 +6,7 @@ import userIcon from '../../../img/icon/user.svg';
 import fireIcon from '../../../img/icon/fire.svg';
 import userGroupIcon from '../../../img/icon/user-group.svg';
 import configIcon from '../../../img/icon/cog.svg';
-import {lsUserKey} from "../../constants/keys";
+import {currentIP, lsUserKey} from "../../constants/keys";
 
 class Sidebar extends React.Component{
 
@@ -48,10 +48,10 @@ class Sidebar extends React.Component{
                         <span>Inicio</span> <img className={"w-6 ml-4"} src={logoIcon} alt="woofer"/>
                     </Link>
 
-                    <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"}
-                          to={`/profile/${JSON.parse(localStorage.getItem(lsUserKey)).acc}`}>
+                    <div onClick={()=>{window.location.href = `http://${currentIP}/profile/${JSON.parse(localStorage.getItem(lsUserKey)).acc}`}}
+                        className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight cursor-pointer"}>
                         <span>Perfil</span> <img className={"w-6 ml-4"} src={userIcon} alt="perfil"/>
-                    </Link>
+                    </div>
 
                     <Link className={"pl-8 py-4 flex flex-row hover:bg-primary hover:text-midnight"} to={"/communities"}>
                         <span>Comunidades</span> <img className={"w-6 ml-4"} src={userGroupIcon} alt="comunidades"/>

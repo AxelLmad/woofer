@@ -3,6 +3,8 @@ import Publisher from "../../shared_components/publisher/publisher";
 import Feed from "../../shared_components/feed/feed";
 import AsideBar from "./aside-bar/aside-bar";
 import {communityApiURLs, devRootURL, postApiURLs} from "../../constants/api-url";
+import {Post} from "../../../models/post";
+import {lsUserKey} from "../../constants/keys";
 
 class Communities extends React.Component{
 
@@ -14,6 +16,28 @@ class Communities extends React.Component{
 
     constructor() {
         super();
+
+
+
+        fetch(`${devRootURL}${postApiURLs.followedCommunity(JSON.parse(localStorage.getItem(lsUserKey)).id)}`,{
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then((json)=>{
+
+                const auxPosts = json.map((element) => {
+
+                    return new Post(element.id,
+                        element.content,
+                        element.creationDate,
+                        {id: element.authorId, name: element.name, nickname: element.nickName},
+                        {name: element.communityName, id: element.communityId, color: element.color});
+
+                });
+
+                this.setState({posts: [...auxPosts]});
+            })
+            .catch(err => console.log(err));
 
     }
 

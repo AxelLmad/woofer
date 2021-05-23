@@ -20,6 +20,7 @@ import Feed from "../feed/feed";
 import {Post} from "../../../models/post";
 import backIcon from "../../../img/icon/arrow-left.svg";
 import { Link } from "react-router-dom";
+import AlertDialog from "../alertDialog/alertDialog";
 
 
 class PostView extends React.Component{
@@ -45,6 +46,7 @@ class PostView extends React.Component{
         this.commentPublish = this.commentPublish.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
+
 
 
 
@@ -107,15 +109,16 @@ class PostView extends React.Component{
             })
             .catch(err => console.log(err));
 
-        nullPicture = false;
+        let nullPicture1 = false;
 
         fetch(`${devRootURL}${userPictureApiURLs.byUserId(this.props.userId)}`,{
             method: 'GET'
         })
-            .then(response => response.status===200?response.json():nullPicture = true)
+            .then(response => response.status===200?response.json():nullPicture1 = true)
             .then((json)=>{
-                if(!nullPicture){
+                if(!nullPicture1){
 
+                    console.log(json);
                     const storageRef = firebase.storage().ref();
                     const starsRef = storageRef.child(json.serverPath);
 
@@ -301,6 +304,7 @@ class PostView extends React.Component{
                         </div>
                     }
                 </Modal>
+
             </section>
         );
     }

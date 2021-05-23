@@ -8,6 +8,7 @@ import Signup from "./pages/signup/signup";
 import Profile from './pages/profile/profile';
 import Configuration from "./pages/configuration/configuration";
 import Communities from './pages/communities/communities';
+import CommunityView from "./pages/community/communityView";
 
 class ProfileContainer extends React.Component{
 
@@ -25,6 +26,28 @@ class ProfileContainer extends React.Component{
 
         return  <Layout>
             <Profile nickname={this.props.match.params.nickname}/>
+        </Layout>
+
+    }
+
+}
+
+class CommunityContainer extends React.Component{
+
+    state = {
+
+
+    }
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    render(){
+
+        return  <Layout>
+            <CommunityView name={this.props.match.params.name} id={this.props.match.params.id}/>
         </Layout>
 
     }
@@ -79,6 +102,9 @@ class App extends React.Component{
                                 <Communities/>
                             </Layout>
 
+                        </Route>
+
+                        <Route path='/community/:name/:id' component={CommunityContainer}>
                         </Route>
 
                         <Route exact path='/configuration'>

@@ -127,40 +127,9 @@ namespace SMedia.Clases.Core
                         }).Take(10).ToList();
                     List<LastPostsModel> lp = LastPosts2.Union(UserPosts).ToList();
 
-                    List<long> insertedIds = new List<long>();
+                    SetViews(lp, id);
+                    return lp;
 
-                    List<LastPostsModel> finalList = new List<LastPostsModel>();
-
-                    foreach (LastPostsModel post in lp)
-                    {
-
-                        bool isInserted = false;
-
-                        foreach (long insertedId in insertedIds)
-                        {
-
-                            
-
-                            if(post.Id == insertedId)
-                            {
-
-                                isInserted = true;
-                                break;
-
-                            }
-
-                        }
-
-                        if (!isInserted)
-                        {
-                            insertedIds.Add(post.Id);
-                            finalList.Add(post);
-
-                        }
-
-                    }
-
-                    return finalList;
                 }
                 return null;
             }
@@ -202,7 +171,10 @@ namespace SMedia.Clases.Core
                                                           LastPostActive = P.LastPost.Active
                                                       }).ToList();
                     if (LastPosts != null)
+                    {
+                        SetViews(LastPosts, id);
                         return LastPosts;
+                    }
                     return null;
                 }
                 return null;
@@ -240,6 +212,85 @@ namespace SMedia.Clases.Core
                                                     LastPostActive = P.LastPost.Active
                                                   }).ToList();
                 return lastposts;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<LastPostsModel> GetFollowedCommunityPost(long id)
+        {
+            try
+            {
+                bool AnyUser = dbContext.User.Any(u => u.Id == id && u.Active);
+                if (AnyUser)
+                {
+                    List<LastPostsModel> lastPosts = (from P in dbContext.Post
+                                                      join FC in dbContext.FollowedCommunity on P.CommunityId equals FC.CommunityId
+                                                      join C in dbContext.Community on FC.CommunityId equals C.Id
+                                                      where (FC.FollowerId == id && P.Active)
+                                                      select new LastPostsModel
+                                                      {
+                                                          Id = P.Id,
+                                                          Content = P.Content,
+                                                          CreationDate = P.CreationDate,
+                                                          AuthorId = P.AuthorId,
+                                                          Name = P.Author.Name,
+                                                          LastName = P.Author.LastName,
+                                                          NickName = P.Author.NickName,
+                                                          CommunityId = P.CommunityId,
+                                                          CommunityName = C.Name,
+                                                          Color = C.Color,
+                                                          LastPostId = P.LastPostId,
+                                                          Active = P.Active,
+                                                          LastPostContent = P.LastPost.Content,
+                                                          LastPostAuthorName = P.LastPost.Author.Name,
+                                                          LastPostCommunityName = P.LastPost.Community.Name,
+                                                          LastPostCreationDate = P.LastPost.CreationDate,
+                                                          LastPostActive = P.LastPost.Active
+                                                      }
+                                                      ).ToList();
+                    return lastPosts;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<LastPostsModel> GetCommunityPost(long id)
+        {
+            try
+            {
+                bool AnyCommunity = dbContext.Community.Any(x => x.Id == id);
+                if (AnyCommunity)
+                {
+                    List<LastPostsModel> lastPosts = (from P in dbContext.Post
+                                                      where (P.CommunityId == id && P.Active)
+                                                      select new LastPostsModel()
+                                                      {
+                                                          Id = P.Id,
+                                                          Content = P.Content,
+                                                          CreationDate = P.CreationDate,
+                                                          AuthorId = P.AuthorId,
+                                                          Name = P.Author.Name,
+                                                          LastName = P.Author.LastName,
+                                                          NickName = P.Author.NickName,
+                                                          CommunityId = P.CommunityId,
+                                                          CommunityName = P.Community.Name,
+                                                          Color = P.Community.Color,
+                                                          LastPostId = P.LastPostId,
+                                                          Active = P.Active,
+                                                          LastPostContent = P.LastPost.Content,
+                                                          LastPostAuthorName = P.LastPost.Author.Name,
+                                                          LastPostCommunityName = P.LastPost.Community.Name,
+                                                          LastPostCreationDate = P.LastPost.CreationDate,
+                                                          LastPostActive = P.LastPost.Active
+                                                      }).ToList();
+                    return lastPosts;
+                }
+                return null;
             }
             catch(Exception ex)
             {
@@ -328,6 +379,29 @@ namespace SMedia.Clases.Core
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public void SetViews(List<LastPostsModel> posts, long id)
+        {
+            try
+            {
+                foreach(LastPostsModel LP in posts)
+                {
+                    bool AnyView = dbContext.Viewed.Any(x => x.UserId == id && x.PostId == LP.Id);
+                    if (AnyView)
+                    {
+                        Viewed viewed = new();
+                        viewed.PostId = LP.Id;
+                        viewed.UserId = LP.AuthorId;
+                        dbContext.Add(viewed);
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
             }
         }
     }

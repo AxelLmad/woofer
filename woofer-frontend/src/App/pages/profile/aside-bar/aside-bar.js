@@ -127,7 +127,8 @@ class AsideBar extends React.Component{
             <Modal open={this.state.openModal}>
                 {<SmallList closeModal={() => {
                     this.setState({openModal: false});
-                }} list={this.state.selectedList}/>}
+                }} list={this.state.selectedList}
+                title={"Lista"}/>}
             </Modal>
         </div>);
 

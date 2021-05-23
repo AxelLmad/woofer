@@ -1,6 +1,6 @@
 export class User{
 
-    constructor({id, nickname, email, name, lastName, picture = '', registerDate = '', lastLogIn = ''}) {
+    constructor({id, nickname, email, name, lastName, picture, registerDate = '', lastLogIn = ''}) {
 
 
         this.id = id;

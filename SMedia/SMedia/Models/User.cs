@@ -63,6 +63,17 @@ namespace SMedia.Models
         public DateTime LastLogin { get; set; }
 
     }
+    public class ReturnUser
+    {
+        public long Id { get; set; }
+        public string NickName { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+        public string? Picture { get; set; }
+        public DateTime RegisterDate { get; set; }
+        public DateTime LastLogin { get; set; }
+    }
     public class User
     {
         public long Id { get; set; }

@@ -9,7 +9,8 @@ import {
 import {lsUserKey} from "../../../constants/keys";
 import {Community} from "../../../../models/community";
 import { Link } from "react-router-dom";
-import firebase from "firebase";
+import SmallListCard from "../../../shared_components/small-list/small-list-card";
+import {User} from "../../../../models/user";
 
 class AsideBar extends React.Component{
 
@@ -94,16 +95,12 @@ class AsideBar extends React.Component{
 
         let key = 0;
 
-        return this.state.randomCommunities.map((el)=>{
+            return this.state.randomCommunities.map((el) => {
 
-            return <article key={key++} className={"flex flex-col items-center bg-dark w-full"}>
-                <h5>{el.name}</h5>
-                <figure><img className={"w-1/3 mx-auto"} src={el.picture} alt={el.name}/></figure>
-                <Link to={``}
-                      className={"pl-14 rounded-full w-2/3 h-6 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary"}>
-                    Ver
-                </Link>
-            </article>
+                return (<li key={key++}><SmallListCard small={true} id={el.id} nickname={el.nickname} name={el.name} description={el.description} color={el.color}
+                                                       type={(el instanceof User)?'user':'community'}
+                                                       picture={el.picture}
+                /></li>);
 
     });
 
@@ -131,10 +128,7 @@ class AsideBar extends React.Component{
             <h4 className={"text-center mt-5 mb-3"}>Sugerencias</h4>
 
             {
-
                     this.renderRandom()
-
-
 
             }
 

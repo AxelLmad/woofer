@@ -51,7 +51,7 @@ class Home extends React.Component{
         return(
             <div className={"flex flex-row justify-center w-full xl:ml-72"}>
                 <div className={"flex flex-col items-center w-full mt-20"}>
-                    <Publisher className={"w-full"} username={JSON.parse(localStorage.getItem('woofer-user-ac')).acc}/>
+                    <Publisher className={"w-full"} username={JSON.parse(localStorage.getItem(lsUserKey)).acc}/>
                     <Feed posts={this.state.posts}/>
                 </div>
                 <AsideBar className={"hidden"}/>

@@ -57,8 +57,20 @@ class Login extends React.Component{
         })
             .then(response => response.json())
             .then((json)=>{
-                localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: json.id}));
-                window.location.href =`http://${currentIP}/`;
+                if(json.id === undefined){
+
+                    this.setState({errorLog: ['Credenciales incorrectas']})
+
+                }
+
+                else{
+                    console.log(json);
+                    localStorage.setItem(lsUserKey, JSON.stringify({acc: this.state.nickname, id: json.id}));
+                    window.location.href = `http://${currentIP}/`;
+
+                }
+
+
             })
             .catch(err => console.log(err));
 

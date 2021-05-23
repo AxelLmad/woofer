@@ -14,6 +14,6 @@ export class Post{
     content;
     creationDate;
     author; // expects User from src/models/user
-    community; // expects Community from src/models/community
+    community; // expects CommunityView from src/models/community
 
 }
