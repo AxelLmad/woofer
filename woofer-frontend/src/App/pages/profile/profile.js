@@ -147,7 +147,7 @@ class Profile extends React.Component{
 
                 followerId: JSON.parse(localStorage.getItem(lsUserKey)).id
             ,
-                followedId: this.props.id
+                followedId: this.state.id
             }
         );
 
@@ -164,13 +164,15 @@ class Profile extends React.Component{
                 }
                 else{
 
-                    fetch(`${devRootURL}${followedUserApiURLs.follow}`, {
-                        method: 'POST',
+                    fetch(`${devRootURL}${followedUserApiURLs.unfollow}`, {
+                        method: 'DELETE',
                         headers: {'Content-type': 'application/json;charset=UTF-8'},
                         body: postBody
                     })
                         .then(response => {
-
+                            if (response.status === 200){
+                                this.setState({openFollowed: true, openFollowedContent: `Has dejado de seguir a ${this.props.nickname}`});
+                            }
                         }).then(()=>{})
                         .catch(err => console.log(err));
 
@@ -186,10 +188,10 @@ class Profile extends React.Component{
             <div className={"flex flex-row justify-center w-full xl:ml-72"}>
                 <div className={"flex flex-col items-center w-full mt-20"}>
 
-                    <article className={"flex flex-row lg:flex-column bg-dark w-2/5 text-white border rounded py-2"}>
+                    <article className={"flex flex-row lg:flex-column bg-dark w-11/12 lg:w-2/5 text-white border rounded p-2"}>
                         <div className={"flex flex-column"}>
-                            <figure className={"flex w-36 justify-end"}>
-                                <img className={"w-3/4 max-h-40 p-0.5 border border-primary border-lg"} src={this.state.picture} alt={this.state.nickname}/>
+                            <figure className={"flex w-24 h-24 lg:w-36 object-contain justify-end mr-5"}>
+                                <img className={"max-h-40 p-0.5 border border-primary border-lg"} src={this.state.picture} alt={this.state.nickname}/>
                             </figure>
                         </div>
                         <div className={"flex flex-column"}>
@@ -198,13 +200,14 @@ class Profile extends React.Component{
                                 <h4 >{this.state.followers.length===0?'':`${this.state.followers.length} seguidores`}</h4>
                                 <h4>{this.state.name} {this.state.lastName}</h4>
                             </hgroup>
-                            <button onClick={this.follow}
-                                className={`${(this.state.id === JSON.parse(localStorage.getItem(lsUserKey)).id)?'hidden':''}
-                            self-end mr-4 rounded-full w-11/12 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary`}>
-                                Seguir
-                            </button>
+
                             <AlertDialog content={this.state.openFollowedContent} open={this.state.openFollowed} handleClose={()=>{this.setState({openFollowed: false})}}/>
                         </div>
+                        <button onClick={this.follow}
+                                className={`${(this.state.id === JSON.parse(localStorage.getItem(lsUserKey)).id)?'hidden':''}
+                            self-end mr-4 rounded-full w-8/12 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary`}>
+                            Seguir
+                        </button>
                     </article>
 
                     <Publisher className={"w-full"} username={JSON.parse(localStorage.getItem('woofer-user-ac')).acc}/>

@@ -49,12 +49,29 @@ class CommunityView extends React.Component{
             .then(response => {
                 if (response.status === 200) {
 
-                    this.setState({openFollowed: true, openFollowedContent: `Has seguido a ${this.props.name}`});
+                    this.setState({openFollowed: true, openFollowedContent: `Has seguido ${this.props.name}`});
 
                 }
                 else{
 
-                    this.setState({openFollowed: true, openFollowedContent: `Ya sigues a ${this.props.name}`});
+                    fetch(`${devRootURL}${followedCommunityApiURLs.unfollow}`, {
+                        method: 'DELETE',
+                        headers: {'Content-type': 'application/json;charset=UTF-8'},
+                        body: postBody
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+
+                                this.setState({openFollowed: true, openFollowedContent: `Has dejado de seguir ${this.props.name}`});
+
+                            }
+                            else{
+
+
+
+                            }
+                        }).then(()=>{})
+                        .catch(err => console.log(err));
 
                 }
             }).then(()=>{})
@@ -119,10 +136,10 @@ class CommunityView extends React.Component{
 
         return <div className={"flex flex-row justify-center w-full xl:ml-72"}>
             <div className={"flex flex-col items-center w-full mt-20"}>
-                <article className={"grid grid-cols-2 gap-x-3 bg-dark w-2/5 text-white border rounded py-2"}>
+                <article className={"flex flex-row lg:flex-column bg-dark w-11/12 lg:w-2/5 text-white border rounded p-2"}>
                     <div className={"flex flex-column"}>
-                        <figure className={"flex justify-end"}>
-                            <img className={"w-3/4 max-h-40 p-0.5 border border-primary border-lg"} src={this.state.picture} alt={this.props.name}/>
+                        <figure className={"flex w-24 h-24 lg:w-36 object-contain justify-end mr-5"}>
+                            <img className={"max-h-40 p-0.5 border border-primary border-lg"} src={this.state.picture} alt={this.state.nickname}/>
                         </figure>
                     </div>
                     <div className={"flex flex-column"}>
@@ -130,12 +147,13 @@ class CommunityView extends React.Component{
                             <h2 className={"font-bold text-3xl text-primary"}>{this.props.name}</h2>
                             <h4 className={`px-5 ${this.state.color} mr-2 `}>{this.state.description}</h4>
                         </hgroup>
-                        <button onClick={this.follow}
-                            className={`self-end mr-4 rounded-full w-11/12 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary`}>
-                            Seguir
-                        </button>
+
                         <AlertDialog content={this.state.openFollowedContent} open={this.state.openFollowed} handleClose={()=>{this.setState({openFollowed: false})}}/>
                     </div>
+                    <button onClick={this.follow}
+                            className={`self-end mr-4 rounded-full w-11/12 h-12 font-bold text-dark bg-light mx-auto mt-4 hover:bg-primary`}>
+                        Seguir
+                    </button>
                 </article>
                 <Publisher className={"w-full"} username={JSON.parse(localStorage.getItem('woofer-user-ac')).acc}/>
                 <Feed posts={this.state.posts}/>

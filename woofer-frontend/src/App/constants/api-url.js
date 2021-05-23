@@ -36,7 +36,8 @@ export const postApiURLs = {
 export const followedCommunityApiURLs = {
 
     getByFollower: (id) => {return `/api/FollowedCommunity/ByUserId/${id}`},
-    follow: '/api/FollowedCommunity/Create'
+    follow: '/api/FollowedCommunity/Create',
+    unfollow: '/api/FollowedCommunity/Delete'
 
 };
 
@@ -45,7 +46,7 @@ export const followedUserApiURLs = {
     getFollowers: (id) => {return `/api/FollowedUser/Followers/${id}`},
     getFollowedUsers: (id) => {return `/api/FollowedUser/FollowedUsers/${id}`},
     follow: '/api/FollowedUser/Create',
-    unfollow: '/api/FollowedUser/Delete/{id}'
+    unfollow: '/api/FollowedUser/Delete'
 
 };
 
