@@ -87,6 +87,34 @@ namespace SMedia.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetFollowedCommunityPost([FromRoute] long id)
+        {
+            try
+            {
+                PostCore postCore = new PostCore(dbContext);
+                return Ok(postCore.GetFollowedCommunityPost(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCommunityPost([FromRoute] long id)
+        {
+            try
+            {
+                PostCore postCore = new PostCore(dbContext);
+                return Ok(postCore.GetCommunityPost(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
         [HttpPost]
         public IActionResult CreatePost([FromBody] CreationPost post)
         {

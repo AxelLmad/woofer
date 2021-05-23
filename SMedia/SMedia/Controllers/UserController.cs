@@ -20,20 +20,6 @@ namespace SMedia.Controllers
         {
             this.dbContext = dbContext;
         }
-      
-        [HttpGet]
-        public IActionResult All()
-        {
-            try
-            {
-                UserCore core = new UserCore(dbContext);
-                return Ok(core.GetAll());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex);
-            }
-        }
 
         [HttpGet("{id}")]
         public IActionResult ById([FromRoute] long id)
