@@ -66,7 +66,7 @@ class SmallList extends React.Component{
                 </div>
 
                 <div className={"flex flex-col"}>
-                    <ul className={"list-none"}>
+                    <ul className={"list-none  overflow-y-scroll h-96"}>
                         {this.renderCards()}
                     </ul>
                 </div>
